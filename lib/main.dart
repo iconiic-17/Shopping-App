@@ -1,14 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
-void main() {
-  runApp(const ShoppingApp());
+import 'core/di/service_locator.dart';
+import 'core/routes/app_router.dart';
+import 'core/routes/app_routes.dart';
+import 'core/theme/app_theme.dart';
+import 'core/utils/app_prefs.dart';
+
+Future<void> main() async {
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  configureDependencies();
+
+  final isFirstTime = await AppPrefs.isFirstTime();
+  FlutterNativeSplash.remove();
+
+  runApp(MyApp(isFirstTime: isFirstTime));
 }
 
-class ShoppingApp extends StatelessWidget {
-  const ShoppingApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key, required this.isFirstTime});
+
+  final bool isFirstTime;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false);
+    return MaterialApp(
+      title: 'Shopping App',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.light,
+      initialRoute: isFirstTime ? AppRoutes.onBoarding : AppRoutes.hello,
+      onGenerateRoute: AppRouter.generateRoute,
+    );
   }
 }
