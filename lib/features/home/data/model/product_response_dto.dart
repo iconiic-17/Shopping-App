@@ -9,11 +9,11 @@ class ProductResponseDto {
   ProductResponseDto({this.list, this.total, this.skip, this.limit});
 
   ProductResponseDto.fromJson(Map<String, dynamic> json) {
-    // غيّر 'list' لـ 'products' لو ده اسم المفتاح في الـ API
     if (json['list'] != null) {
-      list = (json['list'] as List)
-          .map((v) => ProductItemDto.fromJson(v))
-          .toList();
+      list = <ProductItemDto>[];
+      json['list'].forEach((v) {
+        list!.add(ProductItemDto.fromJson(v));
+      });
     }
     total = json['total'];
     skip = json['skip'];

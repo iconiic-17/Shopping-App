@@ -11,7 +11,6 @@ import 'package:shopping_app/features/home/presentation/view/screens/home_screen
 import 'package:shopping_app/features/home/presentation/view_model/home_cubit.dart';
 
 class AppSectionView extends StatefulWidget {
-  // ✅ دلوقتي const، ومفيش fields جواه
   const AppSectionView({super.key});
 
   @override
@@ -19,10 +18,9 @@ class AppSectionView extends StatefulWidget {
 }
 
 class _AppSectionViewState extends State<AppSectionView> {
-  // ✅ الليست هنا بدل الـ widget
   final List<Widget> _tabs = [
     BlocProvider<HomeCubit>(
-      create: (context) => serviceLocator<HomeCubit>()..intent(HIProducts()),
+      create: (context) => serviceLocator<HomeCubit>()..intent(HIntentCalls()),
       child: HomeScreen(),
     ),
     CartScreen(),
@@ -38,11 +36,7 @@ class _AppSectionViewState extends State<AppSectionView> {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(),
-            body: IndexedStack(
-              index: state.currentIndex,
-              // ✅ من غير widget. لأن _tabs بقت في الـ State نفسه
-              children: _tabs,
-            ),
+            body: IndexedStack(index: state.currentIndex, children: _tabs),
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: state.currentIndex,
               onTap: (index) =>

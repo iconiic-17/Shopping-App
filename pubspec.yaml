@@ -43,6 +43,7 @@ dependencies:
   flutter_svg: ^2.2.0
   shared_preferences: ^2.5.3
   flutter_native_splash: ^2.4.6
+  skeletonizer: ^3.0.0
 
 
 dev_dependencies:

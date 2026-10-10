@@ -1,3 +1,5 @@
+import 'package:shopping_app/core/constants/app_constants.dart';
+
 class ProductResponseEntity {
   List<ProductItemEntity> list;
   int total;
@@ -26,6 +28,6 @@ class ProductItemEntity {
     this.price = 100,
     this.discountPercentage = 7,
     this.rating = 5.0,
-    this.images = const [],
+    this.images = const [AppConstants.image],
   });
 }
