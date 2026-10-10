@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:shopping_app/core/di/service_locator.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
 import 'package:shopping_app/features/account/presentation/view/screens/account_screen.dart';
 import 'package:shopping_app/features/app_section/view_model/app_section_cubit.dart';
@@ -8,12 +8,23 @@ import 'package:shopping_app/features/app_section/view_model/app_section_state.d
 import 'package:shopping_app/features/cart/presentation/view/screens/cart_screen.dart';
 import 'package:shopping_app/features/favourite/presentation/view/screens/favourite_screen.dart';
 import 'package:shopping_app/features/home/presentation/view/screens/home_screen.dart';
+import 'package:shopping_app/features/home/presentation/view_model/home_cubit.dart';
 
-class AppSectionView extends StatelessWidget {
+class AppSectionView extends StatefulWidget {
+  // ✅ دلوقتي const، ومفيش fields جواه
   const AppSectionView({super.key});
 
-  static const List<Widget> _tabs = [
-    HomeScreen(),
+  @override
+  State<AppSectionView> createState() => _AppSectionViewState();
+}
+
+class _AppSectionViewState extends State<AppSectionView> {
+  // ✅ الليست هنا بدل الـ widget
+  final List<Widget> _tabs = [
+    BlocProvider<HomeCubit>(
+      create: (context) => serviceLocator<HomeCubit>()..intent(HIProducts()),
+      child: HomeScreen(),
+    ),
     CartScreen(),
     FavouriteScreen(),
     AccountScreen(),
@@ -26,8 +37,10 @@ class AppSectionView extends StatelessWidget {
       child: BlocBuilder<AppSectionCubit, AppSectionState>(
         builder: (context, state) {
           return Scaffold(
+            appBar: AppBar(),
             body: IndexedStack(
               index: state.currentIndex,
+              // ✅ من غير widget. لأن _tabs بقت في الـ State نفسه
               children: _tabs,
             ),
             bottomNavigationBar: BottomNavigationBar(

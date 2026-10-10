@@ -3,7 +3,6 @@ import 'package:shopping_app/core/theme/app_colors.dart';
 
 abstract class AppTheme {
   static ThemeData light = ThemeData(
-    // Color scaffold
     scaffoldBackgroundColor: AppColors.backGroundGrey,
 
     appBarTheme: AppBarTheme(
@@ -59,6 +58,11 @@ abstract class AppTheme {
         fontSize: 18,
         color: AppColors.black,
         fontWeight: FontWeight.w400,
+      ),
+      labelLarge: TextStyle(
+        fontSize: 18,
+        color: AppColors.black,
+        fontWeight: FontWeight.w600,
       ),
 
       labelMedium: TextStyle(
