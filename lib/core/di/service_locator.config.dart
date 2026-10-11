@@ -27,8 +27,12 @@ import 'package:shopping_app/features/home/domain/use_case/get_all_categories_us
     as _i634;
 import 'package:shopping_app/features/home/domain/use_case/get_all_products_use_case.dart'
     as _i219;
+import 'package:shopping_app/features/home/domain/use_case/get_products_by_category_use_case.dart'
+    as _i32;
 import 'package:shopping_app/features/home/presentation/view_model/home_cubit.dart'
     as _i991;
+import 'package:shopping_app/features/home/presentation/view_model/products_by_category_cubit.dart'
+    as _i395;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -49,6 +53,14 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i219.GetAllProductsUseCase>(
       () => _i219.GetAllProductsUseCase(gh<_i191.HomeRepoInterface>()),
+    );
+    gh.factory<_i32.GetProductsByCategoryUseCase>(
+      () => _i32.GetProductsByCategoryUseCase(gh<_i191.HomeRepoInterface>()),
+    );
+    gh.factory<_i395.ProductsByCategoryCubit>(
+      () => _i395.ProductsByCategoryCubit(
+        gh<_i32.GetProductsByCategoryUseCase>(),
+      ),
     );
     gh.factory<_i991.HomeCubit>(
       () => _i991.HomeCubit(
