@@ -11,6 +11,6 @@ class GetProductsByCategoryUseCase {
   Future<ResultApi<ProductResponseEntity>> invoke(
     String slug, {
     int skip = 0,
-    int limit = 5,
+    int limit = 10,
   }) async => await _repo.getProductsByCategory(slug, skip: skip, limit: limit);
 }

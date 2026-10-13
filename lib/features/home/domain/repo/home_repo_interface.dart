@@ -8,6 +8,6 @@ abstract interface class HomeRepoInterface {
   Future<ResultApi<ProductResponseEntity>> getProductsByCategory(
     String slug, {
     int skip = 0,
-    int limit = 5,
+    int limit = 10,
   });
 }

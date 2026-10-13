@@ -37,7 +37,7 @@ class HomeDataSourceImp implements HomeDataSourceInterface {
   Future<ResultApi<ProductResponseEntity>> getProductsByCategory(
     String slug, {
     int skip = 0,
-    int limit = 5,
+    int limit = 10,
   }) async {
     final result = await _api.getProductsByCategory(
       slug,

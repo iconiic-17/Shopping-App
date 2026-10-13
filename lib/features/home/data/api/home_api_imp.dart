@@ -74,7 +74,7 @@ class HomeApiImp implements HomeApiInterface {
   Future<ResultApi<ProductResponseDto>> getProductsByCategory(
     String slug, {
     int skip = 0,
-    int limit = 5,
+    int limit = 10,
   }) async {
     try {
       final Uri url = Uri.parse(

@@ -22,7 +22,7 @@ class HomeRepoImp implements HomeRepoInterface {
   Future<ResultApi<ProductResponseEntity>> getProductsByCategory(
     String slug, {
     int skip = 0,
-    int limit = 5,
+    int limit = 10,
   }) async =>
       await _dataSource.getProductsByCategory(slug, skip: skip, limit: limit);
 }
