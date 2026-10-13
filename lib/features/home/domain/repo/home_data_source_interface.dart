@@ -5,4 +5,9 @@ import 'package:shopping_app/features/home/domain/entities/product_response_enti
 abstract class HomeDataSourceInterface {
   Future<ResultApi<ProductResponseEntity>> getAllProducts();
   Future<ResultApi<List<CategoryItemEntity>>> getAllCategories();
+  Future<ResultApi<ProductResponseEntity>> getProductsByCategory(
+    String slug, {
+    int skip = 0,
+    int limit = 10,
+  });
 }

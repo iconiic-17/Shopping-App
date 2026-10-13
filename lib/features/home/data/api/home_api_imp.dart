@@ -69,7 +69,42 @@ class HomeApiImp implements HomeApiInterface {
       return Error(e.toString());
     }
   }
+
+  @override
+  Future<ResultApi<ProductResponseDto>> getProductsByCategory(
+    String slug, {
+    int skip = 0,
+    int limit = 10,
+  }) async {
+    try {
+      final Uri url = Uri.parse(
+        '${ApiConstants.baseUrl}${ApiConstants.getProByCategory}/'
+        '${Uri.encodeComponent(slug)}?skip=$skip&limit=$limit',
+      );
+
+      print('URL => $url');
+
+      final http.Response response = await http
+          .get(
+            url,
+            headers: {
+              'Authorization': 'Bearer $token',
+              'Content-Type': 'application/json',
+            },
+          )
+          .timeout(const Duration(seconds: 60));
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final json = jsonDecode(response.body);
+        return Success(ProductResponseDto.fromJson(json));
+      } else {
+        return Error('Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      return Error(e.toString());
+    }
+  }
 }
 
 final String token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYzkwOTRmOTYxMDMwZmFjYmZlMTgyYSIsImlhdCI6MTc5MTY0NjQ2MSwiZXhwIjoxNzk0MjM4NDYxfQ.87SsDml8x1dYbEG9dfSmY_m2RIK24vsxJ0742Sfh_y8";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhY2I4NzRhZWY4MTdjMmM3MmE5ODhjNyIsImlhdCI6MTc5MTcyMzM2NywiZXhwIjoxNzk0MzE1MzY3fQ.N_8PWCi5Sq52pb7qh0T5I_2Q4nc9HGgzFoKSBX7qvAU";

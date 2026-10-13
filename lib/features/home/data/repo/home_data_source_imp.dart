@@ -32,4 +32,23 @@ class HomeDataSourceImp implements HomeDataSourceInterface {
         return Error(result.messageError);
     }
   }
+
+  @override
+  Future<ResultApi<ProductResponseEntity>> getProductsByCategory(
+    String slug, {
+    int skip = 0,
+    int limit = 10,
+  }) async {
+    final result = await _api.getProductsByCategory(
+      slug,
+      skip: skip,
+      limit: limit,
+    );
+    switch (result) {
+      case Success<ProductResponseDto>():
+        return Success(result.data.toEntity());
+      case Error<ProductResponseDto>():
+        return Error(result.messageError);
+    }
+  }
 }
