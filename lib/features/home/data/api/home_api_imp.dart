@@ -107,4 +107,4 @@ class HomeApiImp implements HomeApiInterface {
 }
 
 final String token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhY2I4NzRhZWY4MTdjMmM3MmE5ODhjNyIsImlhdCI6MTc5MTcyMzM2NywiZXhwIjoxNzk0MzE1MzY3fQ.N_8PWCi5Sq52pb7qh0T5I_2Q4nc9HGgzFoKSBX7qvAU";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhY2I4NzRhZWY4MTdjMmM3MmE5ODhjNyIsImlhdCI6MTc5MTkwMzI2MywiZXhwIjoxNzk0NDk1MjYzfQ.r7g1r12jgtxAQLdea5wU2988TWIFeiSSbYxdFcRSsi0";
