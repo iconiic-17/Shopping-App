@@ -10,8 +10,34 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 
+import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:shopping_app/core/network/dio_module.dart' as _i676;
+import 'package:shopping_app/features/cart/data/repo/cart_data_source_imp.dart'
+    as _i69;
+import 'package:shopping_app/features/cart/data/repo/cart_repo_imp.dart'
+    as _i1035;
+import 'package:shopping_app/features/cart/domain/repo/cart_data_source_interface.dart'
+    as _i752;
+import 'package:shopping_app/features/cart/domain/repo/cart_repo_interface.dart'
+    as _i783;
+import 'package:shopping_app/features/cart/domain/use_case/get_item_use_case.dart'
+    as _i345;
+import 'package:shopping_app/features/cart/presentation/view_model/cart_cubit.dart'
+    as _i824;
+import 'package:shopping_app/features/favourite/data/repo/favourite_data_source_imp.dart'
+    as _i708;
+import 'package:shopping_app/features/favourite/data/repo/favourite_repo_imp.dart'
+    as _i1073;
+import 'package:shopping_app/features/favourite/domain/repo/favourite_data_source_interface.dart'
+    as _i267;
+import 'package:shopping_app/features/favourite/domain/repo/favourite_repo_interface.dart'
+    as _i563;
+import 'package:shopping_app/features/favourite/domain/use_case/get_item_use_case.dart'
+    as _i413;
+import 'package:shopping_app/features/favourite/presentation/view_model/favourite_cubit.dart'
+    as _i443;
 import 'package:shopping_app/features/home/data/api/home_api_imp.dart' as _i27;
 import 'package:shopping_app/features/home/data/api/home_api_interface.dart'
     as _i824;
@@ -57,16 +83,62 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    final networkModule = _$NetworkModule();
+    gh.lazySingleton<_i361.Dio>(() => networkModule.dio());
     gh.factory<_i824.HomeApiInterface>(() => _i27.HomeApiImp());
+    gh.factory<_i267.FavouriteDataSourceInterface>(
+      () => _i708.FavouriteDataSourceImp(gh<_i361.Dio>()),
+    );
     gh.factory<_i209.SearchApiInterface>(() => _i0.SearchApiImp());
+    gh.factory<_i752.CartDataSourceInterface>(
+      () => _i69.CartDataSourceImp(gh<_i361.Dio>()),
+    );
     gh.factory<_i879.HomeDataSourceInterface>(
       () => _i797.HomeDataSourceImp(gh<_i824.HomeApiInterface>()),
+    );
+    gh.factory<_i783.CartRepoInterface>(
+      () => _i1035.CartRepoImp(gh<_i752.CartDataSourceInterface>()),
+    );
+    gh.factory<_i563.FavouriteRepoInterface>(
+      () => _i1073.FavouriteRepoImp(gh<_i267.FavouriteDataSourceInterface>()),
+    );
+    gh.factory<_i413.GetFavouritesUseCase>(
+      () => _i413.GetFavouritesUseCase(gh<_i563.FavouriteRepoInterface>()),
+    );
+    gh.factory<_i413.AddFavouriteUseCase>(
+      () => _i413.AddFavouriteUseCase(gh<_i563.FavouriteRepoInterface>()),
+    );
+    gh.factory<_i413.DeleteFavouriteUseCase>(
+      () => _i413.DeleteFavouriteUseCase(gh<_i563.FavouriteRepoInterface>()),
+    );
+    gh.lazySingleton<_i443.FavouriteCubit>(
+      () => _i443.FavouriteCubit(
+        gh<_i413.GetFavouritesUseCase>(),
+        gh<_i413.AddFavouriteUseCase>(),
+        gh<_i413.DeleteFavouriteUseCase>(),
+      ),
     );
     gh.factory<_i1024.SearchDataSourceInterface>(
       () => _i57.SearchDataSourceImp(gh<_i209.SearchApiInterface>()),
     );
     gh.factory<_i191.HomeRepoInterface>(
       () => _i529.HomeRepoImp(gh<_i879.HomeDataSourceInterface>()),
+    );
+    gh.factory<_i345.GetCartUseCase>(
+      () => _i345.GetCartUseCase(gh<_i783.CartRepoInterface>()),
+    );
+    gh.factory<_i345.AddCartUseCase>(
+      () => _i345.AddCartUseCase(gh<_i783.CartRepoInterface>()),
+    );
+    gh.factory<_i345.DeleteCartUseCase>(
+      () => _i345.DeleteCartUseCase(gh<_i783.CartRepoInterface>()),
+    );
+    gh.lazySingleton<_i824.CartCubit>(
+      () => _i824.CartCubit(
+        gh<_i345.GetCartUseCase>(),
+        gh<_i345.AddCartUseCase>(),
+        gh<_i345.DeleteCartUseCase>(),
+      ),
     );
     gh.factory<_i634.GetAllCategoriesUseCase>(
       () => _i634.GetAllCategoriesUseCase(gh<_i191.HomeRepoInterface>()),
@@ -100,3 +172,5 @@ extension GetItInjectableX on _i174.GetIt {
     return this;
   }
 }
+
+class _$NetworkModule extends _i676.NetworkModule {}

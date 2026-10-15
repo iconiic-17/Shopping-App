@@ -6,7 +6,9 @@ import 'package:shopping_app/features/account/presentation/view/screens/account_
 import 'package:shopping_app/features/app_section/view_model/app_section_cubit.dart';
 import 'package:shopping_app/features/app_section/view_model/app_section_state.dart';
 import 'package:shopping_app/features/cart/presentation/view/screens/cart_screen.dart';
+import 'package:shopping_app/features/cart/presentation/view_model/cart_cubit.dart';
 import 'package:shopping_app/features/favourite/presentation/view/screens/favourite_screen.dart';
+import 'package:shopping_app/features/favourite/presentation/view_model/favourite_cubit.dart';
 import 'package:shopping_app/features/home/presentation/view/screens/home_screen.dart';
 import 'package:shopping_app/features/home/presentation/view_model/home_cubit.dart';
 
@@ -18,14 +20,24 @@ class AppSectionView extends StatefulWidget {
 }
 
 class _AppSectionViewState extends State<AppSectionView> {
-  final List<Widget> _tabs = [
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<CartCubit>().getCart();
+      context.read<FavouriteCubit>().getFavourites();
+    });
+  }
+
+  late final List<Widget> _tabs = [
     BlocProvider<HomeCubit>(
       create: (context) => serviceLocator<HomeCubit>()..intent(HIntentCalls()),
-      child: HomeScreen(),
+      child: const HomeScreen(),
     ),
-    CartScreen(),
-    FavouriteScreen(),
-    AccountScreen(),
+    const CartScreen(),
+    const FavouriteScreen(),
+    const AccountScreen(),
   ];
 
   @override
@@ -35,12 +47,19 @@ class _AppSectionViewState extends State<AppSectionView> {
       child: BlocBuilder<AppSectionCubit, AppSectionState>(
         builder: (context, state) {
           return Scaffold(
-            appBar: AppBar(),
-            body: IndexedStack(index: state.currentIndex, children: _tabs),
+            backgroundColor: AppColors.offWhite,
+            body: SafeArea(
+              child: IndexedStack(index: state.currentIndex, children: _tabs),
+            ),
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: state.currentIndex,
-              onTap: (index) =>
-                  context.read<AppSectionCubit>().changeTab(index),
+              onTap: (index) {
+                context.read<AppSectionCubit>().changeTab(index);
+                if (index == 1) context.read<CartCubit>().getCart();
+                if (index == 2) {
+                  context.read<FavouriteCubit>().getFavourites();
+                }
+              },
               type: BottomNavigationBarType.fixed,
               backgroundColor: AppColors.white,
               selectedItemColor: AppColors.primary,
