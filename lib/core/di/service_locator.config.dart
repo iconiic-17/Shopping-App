@@ -12,6 +12,23 @@
 
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:shopping_app/features/auth/data/api/auth_api.dart' as _i100;
+import 'package:shopping_app/features/auth/data/repo/auth_data_source_impl.dart'
+    as _i101;
+import 'package:shopping_app/features/auth/data/repo/auth_repo_impl.dart'
+    as _i102;
+import 'package:shopping_app/features/auth/domain/repo/auth_data_source_interface.dart'
+    as _i103;
+import 'package:shopping_app/features/auth/domain/repo/auth_repo_interface.dart'
+    as _i104;
+import 'package:shopping_app/features/auth/domain/use_case/login_use_case.dart'
+    as _i105;
+import 'package:shopping_app/features/auth/domain/use_case/register_use_case.dart'
+    as _i106;
+import 'package:shopping_app/features/auth/presentation/view_model/login/login_cubit.dart'
+    as _i107;
+import 'package:shopping_app/features/auth/presentation/view_model/register/register_cubit.dart'
+    as _i108;
 import 'package:shopping_app/features/home/data/api/home_api_imp.dart' as _i27;
 import 'package:shopping_app/features/home/data/api/home_api_interface.dart'
     as _i824;
@@ -57,6 +74,29 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+
+    // ─── Auth ───────────────────────────────────────────────────
+    gh.factory<_i100.AuthApi>(() => _i100.AuthApi());
+    gh.factory<_i103.AuthDataSourceInterface>(
+      () => _i101.AuthDataSourceImpl(gh<_i100.AuthApi>()),
+    );
+    gh.factory<_i104.AuthRepoInterface>(
+      () => _i102.AuthRepoImpl(gh<_i103.AuthDataSourceInterface>()),
+    );
+    gh.factory<_i106.RegisterUseCase>(
+      () => _i106.RegisterUseCase(gh<_i104.AuthRepoInterface>()),
+    );
+    gh.factory<_i105.LoginUseCase>(
+      () => _i105.LoginUseCase(gh<_i104.AuthRepoInterface>()),
+    );
+    gh.factory<_i108.RegisterCubit>(
+      () => _i108.RegisterCubit(gh<_i106.RegisterUseCase>()),
+    );
+    gh.factory<_i107.LoginCubit>(
+      () => _i107.LoginCubit(gh<_i105.LoginUseCase>()),
+    );
+
+    // ─── Home ────────────────────────────────────────────────────
     gh.factory<_i824.HomeApiInterface>(() => _i27.HomeApiImp());
     gh.factory<_i209.SearchApiInterface>(() => _i0.SearchApiImp());
     gh.factory<_i879.HomeDataSourceInterface>(
