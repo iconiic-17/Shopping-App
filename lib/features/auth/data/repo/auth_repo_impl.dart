@@ -8,8 +8,8 @@ import 'package:shopping_app/features/auth/domain/repo/auth_repo_interface.dart'
 @Injectable(as: AuthRepoInterface)
 class AuthRepoImpl implements AuthRepoInterface {
   final AuthDataSourceInterface authDataSource;
-
-  AuthRepoImpl(this.authDataSource);
+ final FlutterSecureStorage storage;
+  AuthRepoImpl(this.authDataSource,this.storage);
 
   @override
   Future<ResultApi<String>> register(RegisterRequestEntity register) async {
@@ -17,7 +17,24 @@ class AuthRepoImpl implements AuthRepoInterface {
   }
 
   @override
-  Future<ResultApi<String>> login(LoginRequestEntity login) async {
-    return await authDataSource.login(login);
+ Future<ResultApi<String>> login(
+    LoginRequestEntity login,
+  ) async {
+    final result = await authDataSource.login(login);
+
+    switch (result) {
+      case Success<LoginResponseEntity>():
+        final entity = result.data;
+
+        await storage.write(
+          key: ApiConstants.token,
+          value: entity.token,
+        );
+
+        return Success(entity.token);
+
+      case Error<LoginResponseEntity>():
+        return Error(result.messageError);
+    }
   }
 }

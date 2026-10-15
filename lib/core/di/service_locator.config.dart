@@ -74,11 +74,15 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    final RegisterModule = _$RegisterModule();
     gh.factory<_i870.AuthApi>(() => _i870.AuthApi());
     gh.factory<_i945.AuthDataSourceInterface>(
       () => _i590.AuthDataSourceImpl(gh<_i870.AuthApi>()),
     );
     gh.factory<_i824.HomeApiInterface>(() => _i27.HomeApiImp());
+    gh.factory<_.FlutterSecureStorage>(
+      () => RegisterModule.flutterSecureStorage,
+    );
     gh.factory<_i209.SearchApiInterface>(() => _i0.SearchApiImp());
     gh.factory<_i879.HomeDataSourceInterface>(
       () => _i797.HomeDataSourceImp(gh<_i824.HomeApiInterface>()),
@@ -91,6 +95,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i817.RegisterUseCase>(
       () => _i817.RegisterUseCase(gh<_i247.AuthRepoInterface>()),
+    );
+    gh.factory<_i817.AppSecureStorage>(
+      () => _i817.AppSecureStorage(gh<_i247.FlutterSecureStorage>()),
     );
     gh.factory<_i346.LoginCubit>(
       () => _i346.LoginCubit(gh<_i768.LoginUseCase>()),

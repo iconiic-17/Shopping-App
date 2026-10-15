@@ -47,6 +47,8 @@ class _LoginScreenState extends State<LoginScreen> {
       child: BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state is LoginSuccess) {
+            Navigator.of(context).pop();
+       
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
@@ -57,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             );
-            Navigator.pushReplacementNamed(context, AppRoutes.home);
+           
           } else if (state is LoginError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
