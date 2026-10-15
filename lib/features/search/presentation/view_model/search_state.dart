@@ -1,6 +1,6 @@
 import 'package:shopping_app/features/home/domain/entities/product_response_entity.dart';
 
-abstract class SearchState {}
+sealed class SearchState {}
 
 class SearchInitial extends SearchState {}
 

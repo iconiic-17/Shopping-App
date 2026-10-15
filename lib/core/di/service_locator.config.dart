@@ -12,6 +12,22 @@
 
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:shopping_app/features/details/data/api/product_details_api_imp.dart'
+    as _i954;
+import 'package:shopping_app/features/details/data/api/product_details_api_interface.dart'
+    as _i398;
+import 'package:shopping_app/features/details/data/repo/product_details_data_source_imp.dart'
+    as _i830;
+import 'package:shopping_app/features/details/data/repo/product_details_repo_imp.dart'
+    as _i283;
+import 'package:shopping_app/features/details/domain/repo/product_details_data_source_interface.dart'
+    as _i6;
+import 'package:shopping_app/features/details/domain/repo/product_details_repo_interface.dart'
+    as _i607;
+import 'package:shopping_app/features/details/domain/use_case/get_product_details_use_case.dart'
+    as _i343;
+import 'package:shopping_app/features/details/presentation/view_model/product_details_cubit.dart'
+    as _i225;
 import 'package:shopping_app/features/home/data/api/home_api_imp.dart' as _i27;
 import 'package:shopping_app/features/home/data/api/home_api_interface.dart'
     as _i824;
@@ -57,16 +73,37 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    gh.factory<_i398.ProductDetailsApiInterface>(
+      () => _i954.ProductDetailsApiImp(),
+    );
     gh.factory<_i824.HomeApiInterface>(() => _i27.HomeApiImp());
     gh.factory<_i209.SearchApiInterface>(() => _i0.SearchApiImp());
     gh.factory<_i879.HomeDataSourceInterface>(
       () => _i797.HomeDataSourceImp(gh<_i824.HomeApiInterface>()),
+    );
+    gh.factory<_i6.ProductDetailsDataSourceInterface>(
+      () => _i830.ProductDetailsDataSourceImp(
+        gh<_i398.ProductDetailsApiInterface>(),
+      ),
+    );
+    gh.factory<_i607.ProductDetailsRepoInterface>(
+      () => _i283.ProductDetailsRepoImp(
+        gh<_i6.ProductDetailsDataSourceInterface>(),
+      ),
     );
     gh.factory<_i1024.SearchDataSourceInterface>(
       () => _i57.SearchDataSourceImp(gh<_i209.SearchApiInterface>()),
     );
     gh.factory<_i191.HomeRepoInterface>(
       () => _i529.HomeRepoImp(gh<_i879.HomeDataSourceInterface>()),
+    );
+    gh.factory<_i343.GetProductDetailsUseCase>(
+      () => _i343.GetProductDetailsUseCase(
+        gh<_i607.ProductDetailsRepoInterface>(),
+      ),
+    );
+    gh.factory<_i225.ProductDetailsCubit>(
+      () => _i225.ProductDetailsCubit(gh<_i343.GetProductDetailsUseCase>()),
     );
     gh.factory<_i634.GetAllCategoriesUseCase>(
       () => _i634.GetAllCategoriesUseCase(gh<_i191.HomeRepoInterface>()),

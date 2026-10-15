@@ -45,6 +45,7 @@ dependencies:
   flutter_native_splash: ^2.4.6
   skeletonizer: ^3.0.0
   flutter_launcher_icons: ^0.14.4
+  carousel_slider: ^5.1.2
 
 
 dev_dependencies:
