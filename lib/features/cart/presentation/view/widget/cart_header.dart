@@ -9,6 +9,9 @@ class CartHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
       child: Row(
@@ -16,14 +19,20 @@ class CartHeader extends StatelessWidget {
           if (Navigator.canPop(context))
             IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+              icon: Icon(
+                Icons.arrow_back_ios_new,
+                size: 18,
+                color: theme.colorScheme.onSurface,
+              ),
             )
           else
             const SizedBox(width: 12),
-          const Expanded(
+          Expanded(
             child: Text(
               'Your Cart',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+              style: textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w800,
+              ),
             ),
           ),
           IconButton(

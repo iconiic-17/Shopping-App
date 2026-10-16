@@ -15,6 +15,8 @@ class QuantityStepper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -23,7 +25,10 @@ class QuantityStepper extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14),
           child: Text(
             '$quantity',
-            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+            style: textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ) ??
+                const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
           ),
         ),
         _RoundIcon(icon: Icons.add, onTap: onIncrement),
@@ -40,6 +45,8 @@ class _RoundIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return InkWell(
       onTap: onTap,
       customBorder: const CircleBorder(),
@@ -50,7 +57,11 @@ class _RoundIcon extends StatelessWidget {
           shape: BoxShape.circle,
           border: Border.all(color: AppColors.divider),
         ),
-        child: Icon(icon, size: 16),
+        child: Icon(
+          icon,
+          size: 16,
+          color: colorScheme.onSurface,
+        ),
       ),
     );
   }

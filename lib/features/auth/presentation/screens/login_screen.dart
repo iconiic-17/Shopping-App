@@ -20,6 +20,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -29,18 +32,18 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 40),
-              const Text(
+              Text(
                 'Welcome Back! 👋',
-                style: TextStyle(
-                  fontSize: 32,
+                style: textTheme.headlineLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
+              Text(
                 'Sign in to your account to continue',
-                style: TextStyle(fontSize: 16, color: AppColors.textSecondary),
+                style: textTheme.bodyMedium?.copyWith(
+                  color: AppColors.textSecondary,
+                ),
               ),
               const SizedBox(height: 48),
               const CustomTextField(
@@ -48,7 +51,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 hint: 'Enter your email',
                 prefixIcon: Icons.email_outlined,
                 keyboardType: TextInputType.emailAddress,
-                hintText: '',
               ),
               const SizedBox(height: 24),
               CustomTextField(
@@ -69,7 +71,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: AppColors.textSecondary,
                   ),
                 ),
-                hintText: '',
               ),
               const SizedBox(height: 16),
               Row(
@@ -90,13 +91,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          activeColor: AppColors.primary,
+                          activeColor: theme.colorScheme.primary,
                         ),
                       ),
                       const SizedBox(width: 8),
-                      const Text(
+                      Text(
                         'Remember me',
-                        style: TextStyle(color: AppColors.textSecondary),
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
                       ),
                     ],
                   ),
@@ -107,10 +110,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    child: const Text(
+                    child: Text(
                       'Forgot Password?',
-                      style: TextStyle(
-                        color: AppColors.primary,
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.primary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -129,17 +132,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
               ),
               const SizedBox(height: 32),
-              const Row(
+              Row(
                 children: [
-                  Expanded(child: Divider(color: AppColors.divider)),
+                  const Expanded(child: Divider(color: AppColors.divider)),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
                       'Or continue with',
-                      style: TextStyle(color: AppColors.textSecondary),
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
                     ),
                   ),
-                  Expanded(child: Divider(color: AppColors.divider)),
+                  const Expanded(child: Divider(color: AppColors.divider)),
                 ],
               ),
               const SizedBox(height: 24),
@@ -161,18 +166,20 @@ class _LoginScreenState extends State<LoginScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
+                  Text(
                     "Don't have an account?",
-                    style: TextStyle(color: AppColors.textSecondary),
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
                       Navigator.pushNamed(context, AppRoutes.register);
                     },
-                    child: const Text(
+                    child: Text(
                       'Sign Up',
-                      style: TextStyle(
-                        color: AppColors.primary,
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

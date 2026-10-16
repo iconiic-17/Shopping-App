@@ -6,13 +6,13 @@ class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
     required this.label,
-    required this.hint,
+    this.hint = '',
     this.prefixIcon,
     this.keyboardType,
     this.obscureText = false,
     this.suffixIcon,
     this.controller,
-    required this.hintText,
+    this.hintText,
     this.isPassword = false,
     this.onToggleVisibility,
     this.validator,
@@ -25,41 +25,39 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final Widget? suffixIcon;
   final TextEditingController? controller;
-  final String hintText;
+  final String? hintText;
   final bool isPassword;
   final VoidCallback? onToggleVisibility;
   final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final effectiveHint = hint.isNotEmpty ? hint : (hintText ?? '');
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
-          ),
+          style: theme.textTheme.titleSmall ??
+              const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
+              ),
         ),
-
         const SizedBox(height: 8),
-
         TextFormField(
           controller: controller,
           keyboardType: keyboardType,
           obscureText: obscureText,
           validator: validator,
-
           decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: const TextStyle(color: AppColors.textHint),
-
+            hintText: effectiveHint,
             prefixIcon: prefixIcon == null
                 ? null
                 : Icon(prefixIcon, color: AppColors.textSecondary),
-
             suffixIcon: isPassword
                 ? IconButton(
                     onPressed: onToggleVisibility,
@@ -69,29 +67,6 @@ class CustomTextField extends StatelessWidget {
                     ),
                   )
                 : suffixIcon,
-
-            filled: true,
-            fillColor: AppColors.fieldFill,
-
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.border),
-            ),
-
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.border),
-            ),
-
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.primary),
-            ),
-
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.redAccent),
-            ),
           ),
         ),
       ],

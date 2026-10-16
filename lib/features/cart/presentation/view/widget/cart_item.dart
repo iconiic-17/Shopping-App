@@ -20,6 +20,9 @@ class CartItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
     final meta = [
       if (item.size.isNotEmpty) 'Size: ${item.size}',
       if (item.color.isNotEmpty) 'Color: ${item.color}',
@@ -61,28 +64,25 @@ class CartItemWidget extends StatelessWidget {
                       item.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w700,
-                        fontSize: 16,
                       ),
                     ),
                     if (meta.isNotEmpty) ...[
                       const SizedBox(height: 4),
                       Text(
                         meta,
-                        style: const TextStyle(
+                        style: textTheme.bodySmall?.copyWith(
                           color: AppColors.textSecondary,
-                          fontSize: 12,
                         ),
                       ),
                     ],
                     const SizedBox(height: 6),
                     Text(
                       '\$${item.price.toStringAsFixed(2)}',
-                      style: const TextStyle(
-                        color: AppColors.primary,
+                      style: textTheme.titleMedium?.copyWith(
+                        color: theme.colorScheme.primary,
                         fontWeight: FontWeight.w800,
-                        fontSize: 16,
                       ),
                     ),
                   ],
@@ -106,9 +106,8 @@ class CartItemWidget extends StatelessWidget {
               const Spacer(),
               Text(
                 '\$${item.lineTotal.toStringAsFixed(2)}',
-                style: const TextStyle(
+                style: textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w800,
-                  fontSize: 16,
                 ),
               ),
             ],
