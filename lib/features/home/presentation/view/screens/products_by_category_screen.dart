@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shopping_app/core/widgets/app_product_card.dart';
 import 'package:shopping_app/core/widgets/product_item_card.dart';
 import 'package:shopping_app/features/details/presentation/view/screen/product_details_screen.dart';
 import 'package:shopping_app/features/home/domain/entities/product_response_entity.dart';
@@ -20,9 +21,9 @@ class ProductsByCategoryScreen extends StatelessWidget {
 
   static const _gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
     crossAxisCount: 2,
-    crossAxisSpacing: 30,
-    mainAxisSpacing: 18,
-    childAspectRatio: 163 / 288,
+    crossAxisSpacing: 12,
+    mainAxisSpacing: 12,
+    mainAxisExtent: 310,
   );
 
   @override
@@ -40,22 +41,7 @@ class ProductsByCategoryScreen extends StatelessWidget {
                 gridDelegate: _gridDelegate,
                 itemCount: state.products.length,
                 itemBuilder: (context, index) {
-                  final item = state.products[index];
-                  return ProductItemCard(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            ProductDetailsScreen(productId: item.id),
-                      ),
-                    ),
-                    title: item.title,
-                    discount: item.discountPercentage,
-                    price: item.price,
-                    rating: item.rating,
-                    image: item.images.isNotEmpty ? item.images.first : '',
-                    favoriteOnTap: const Icon(Icons.favorite),
-                  );
+                  return AppProductCard(product: state.products[index]);
                 },
               );
             }

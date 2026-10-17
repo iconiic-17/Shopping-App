@@ -1,3 +1,5 @@
+import 'package:shopping_app/core/utils/json_numbers.dart';
+import 'package:shopping_app/core/widgets/safe_network_image.dart';
 import 'package:shopping_app/features/home/domain/entities/product_response_entity.dart';
 
 class ProductResponseDto {
@@ -33,6 +35,8 @@ class ProductResponseDto {
 class ProductItemDto {
   int? id;
   String? title;
+  String? category;
+  String? description;
   double? price;
   double? discountPercentage;
   double? rating;
@@ -41,6 +45,8 @@ class ProductItemDto {
   ProductItemDto({
     this.id,
     this.title,
+    this.category,
+    this.description,
     this.price,
     this.discountPercentage,
     this.rating,
@@ -48,22 +54,42 @@ class ProductItemDto {
   });
 
   ProductItemDto.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    title = json['title'];
-    price = (json['price'] as num?)?.toDouble();
-    discountPercentage = (json['discountPercentage'] as num?)?.toDouble();
-    rating = (json['rating'] as num?)?.toDouble();
-    images = (json['images'] as List?)?.cast<String>();
+    id = asInt(json['id']);
+    title = json['title'] as String?;
+    category = json['category'] as String?;
+    description = json['description'] as String?;
+    price = asDouble(json['price']);
+    discountPercentage = asDouble(json['discountPercentage']);
+    rating = asDouble(json['rating']);
+    images = _imagesOf(json);
   }
 
   ProductItemEntity toEntity() {
     return ProductItemEntity(
       id: id ?? 0,
       title: title ?? '',
+      category: category ?? '',
+      description: description ?? '',
       price: price ?? 0,
       discountPercentage: discountPercentage ?? 0,
       rating: rating ?? 0,
       images: images ?? [],
     );
+  }
+
+  static List<String> _imagesOf(Map<String, dynamic> json) {
+    final collected = <String>[];
+    final rawImages = json['images'];
+    if (rawImages is List) {
+      collected.addAll(rawImages.map((e) => e.toString()));
+    } else if (rawImages is String) {
+      collected.add(rawImages);
+    }
+    if (json['thumbnail'] != null) collected.add(json['thumbnail'].toString());
+    if (json['image'] != null) collected.add(json['image'].toString());
+    return collected
+        .map(SafeNetworkImage.normalize)
+        .where((url) => url.isNotEmpty)
+        .toList();
   }
 }

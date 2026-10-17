@@ -4,6 +4,7 @@ import 'package:shopping_app/core/common/widget/custtom_button.dart';
 
 import 'package:shopping_app/core/routes/app_routes.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -19,6 +20,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -26,9 +30,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         elevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_ios_new,
-            color: AppColors.textPrimary,
+            color: theme.colorScheme.onSurface,
           ),
         ),
       ),
@@ -39,18 +43,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 'Create Account ✨',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                style: textTheme.headlineLarge?.copyWith(
+                  fontWeight: AppFontWeight.bold,
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
+              Text(
                 'Join us today by creating a new account',
-                style: TextStyle(fontSize: 16, color: AppColors.textSecondary),
+                style: textTheme.bodyMedium?.copyWith(
+                  color: AppColors.textSecondary,
+                ),
               ),
               const SizedBox(height: 40),
               const CustomTextField(
@@ -58,7 +62,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 hint: 'Enter your full name',
                 prefixIcon: Icons.person_outline,
                 keyboardType: TextInputType.name,
-                hintText: '',
               ),
               const SizedBox(height: 20),
               const CustomTextField(
@@ -66,7 +69,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 hint: 'Enter your email',
                 prefixIcon: Icons.email_outlined,
                 keyboardType: TextInputType.emailAddress,
-                hintText: '',
               ),
               const SizedBox(height: 20),
               CustomTextField(
@@ -83,7 +85,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     color: AppColors.textSecondary,
                   ),
                 ),
-                hintText: '',
               ),
               const SizedBox(height: 20),
               CustomTextField(
@@ -104,7 +105,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     color: AppColors.textSecondary,
                   ),
                 ),
-                hintText: '',
               ),
               const SizedBox(height: 24),
               Row(
@@ -121,32 +121,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      activeColor: AppColors.primary,
+                      activeColor: theme.colorScheme.primary,
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: RichText(
-                      text: const TextSpan(
+                      text: TextSpan(
                         text: 'I agree to the ',
-                        style: TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: 14,
-                        ),
+                        style: textTheme.bodySmall?.copyWith(
+                              color: AppColors.textSecondary,
+                              fontSize: 14,
+                            ) ??
+                            const TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 14,
+                            ),
                         children: [
                           TextSpan(
                             text: 'Terms of Service',
                             style: TextStyle(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.primary,
+                              fontWeight: AppFontWeight.semiBold,
                             ),
                           ),
-                          TextSpan(text: ' and '),
+                          const TextSpan(text: ' and '),
                           TextSpan(
                             text: 'Privacy Policy',
                             style: TextStyle(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.primary,
+                              fontWeight: AppFontWeight.semiBold,
                             ),
                           ),
                         ],
@@ -164,9 +168,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
+                  Text(
                     'Already have an account?',
-                    style: TextStyle(color: AppColors.textSecondary),
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
@@ -176,11 +182,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Navigator.pushNamed(context, AppRoutes.login);
                       }
                     },
-                    child: const Text(
+                    child: Text(
                       'Sign In',
-                      style: TextStyle(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.bold,
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.primary,
+                        fontWeight: AppFontWeight.bold,
                       ),
                     ),
                   ),

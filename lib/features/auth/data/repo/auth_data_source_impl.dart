@@ -1,10 +1,12 @@
+import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/features/auth/data/api/auth_api.dart';
 import 'package:shopping_app/features/auth/data/model/register_request_dto.dart';
 import 'package:shopping_app/features/auth/domain/entities/register_request_entity.dart';
 import 'package:shopping_app/features/auth/domain/repo/auth_data_source_interface.dart';
 
-class AuthDataSourceImpl  implements AuthDataSourceInterface{
+@Injectable(as: AuthDataSourceInterface)
+class AuthDataSourceImpl implements AuthDataSourceInterface {
   final AuthApi authApi;
   AuthDataSourceImpl(this.authApi);
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 import 'package:shopping_app/features/home/domain/entities/category_item_entity.dart';
 import 'package:shopping_app/features/home/presentation/view/screens/products_by_category_screen.dart';
 import 'package:shopping_app/features/home/presentation/view_model/home_cubit.dart';
@@ -68,7 +69,7 @@ class _CategoryItem extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Material(
-      color: AppColors.black.withOpacity(0.06),
+      color: AppColors.black.withValues(alpha: 0.06),
       borderRadius: BorderRadius.circular(50),
       child: InkWell(
         borderRadius: BorderRadius.circular(50),
@@ -86,12 +87,12 @@ class _CategoryItem extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
-            border: Border.all(color: AppColors.black.withOpacity(0.12)),
+            border: Border.all(color: AppColors.black.withValues(alpha: 0.12)),
           ),
           child: Text(
             name,
             style: theme.textTheme.labelMedium?.copyWith(
-              fontWeight: FontWeight.w600,
+              fontWeight: AppFontWeight.semiBold,
             ),
           ),
         ),

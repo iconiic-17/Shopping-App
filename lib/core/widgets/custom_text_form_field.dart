@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 
 class CustomTextFormField extends StatefulWidget {
   const CustomTextFormField({
@@ -68,13 +69,13 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       textInputAction: widget.action ?? TextInputAction.next,
       focusNode: widget.focusNode,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+      style: const TextStyle(fontSize: 16, fontWeight: AppFontWeight.medium),
       textAlignVertical: TextAlignVertical.center,
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.transparent,
         hintText: widget.hintText,
-        hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        hintStyle: const TextStyle(fontSize: 16, fontWeight: AppFontWeight.medium),
         errorMaxLines: 4,
         errorStyle: const TextStyle(color: Colors.red),
         prefixIcon: widget.prefixIcon,

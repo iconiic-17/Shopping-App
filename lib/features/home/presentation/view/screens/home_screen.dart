@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/di/service_locator.dart';
+import 'package:shopping_app/core/widgets/app_product_card.dart';
 import 'package:shopping_app/core/widgets/product_item_card.dart';
 import 'package:shopping_app/features/details/presentation/view/screen/product_details_screen.dart';
 import 'package:shopping_app/features/home/domain/entities/product_response_entity.dart';
@@ -14,9 +15,9 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 const _gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
   crossAxisCount: 2,
-  crossAxisSpacing: 30,
-  mainAxisSpacing: 18,
-  childAspectRatio: 163 / 288,
+  crossAxisSpacing: 12,
+  mainAxisSpacing: 12,
+  mainAxisExtent: 310,
 );
 
 class HomeScreen extends StatelessWidget {
@@ -118,21 +119,7 @@ class _ProductsGrid extends StatelessWidget {
       gridDelegate: _gridDelegate,
       itemCount: products.length,
       itemBuilder: (context, index) {
-        final item = products[index];
-        return ProductItemCard(
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => ProductDetailsScreen(productId: item.id),
-            ),
-          ),
-          title: item.title,
-          discount: item.discountPercentage,
-          price: item.price,
-          rating: item.rating,
-          image: item.images.isNotEmpty ? item.images.first : '',
-          favoriteOnTap: const Icon(Icons.favorite),
-        );
+        return AppProductCard(product: products[index]);
       },
     );
   }
@@ -157,7 +144,7 @@ class _SkeletonGrid extends StatelessWidget {
             discount: entity.discountPercentage,
             price: entity.price,
             rating: entity.rating,
-            image: entity.images.isNotEmpty ? entity.images.first : '',
+            image: entity.primaryImage,
             favoriteOnTap: const Icon(Icons.favorite),
           );
         },
