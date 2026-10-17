@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/di/service_locator.dart';
 import 'package:shopping_app/core/widgets/app_product_card.dart';
 import 'package:shopping_app/core/widgets/product_item_card.dart';
+import 'package:shopping_app/features/details/presentation/view/screen/product_details_screen.dart';
 import 'package:shopping_app/features/home/domain/entities/product_response_entity.dart';
 import 'package:shopping_app/features/home/presentation/view/widgets/categories_widget.dart';
 import 'package:shopping_app/features/home/presentation/view_model/home_cubit.dart';
@@ -58,7 +59,6 @@ class _HomeBody extends StatelessWidget {
   }
 }
 
-/// المحتوى الأصلي للـ Home زي ما كان بالظبط
 class _NormalHomeContent extends StatelessWidget {
   const _NormalHomeContent();
 
@@ -96,25 +96,15 @@ class _SearchResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = state;
-
-    if (s is SearchLoading) return const _SkeletonGrid();
-
-    if (s is SearchSuccess) {
-      return _ProductsGrid(products: s.products);
-    }
-
-    if (s is SearchEmpty) {
-      return const Center(
+    return switch (state) {
+      SearchLoading() => const _SkeletonGrid(),
+      SearchSuccess(:final products) => _ProductsGrid(products: products),
+      SearchEmpty() => const Center(
         child: Text('No products found matching your search'),
-      );
-    }
-
-    if (s is SearchError) {
-      return Center(child: Text(s.error));
-    }
-
-    return const SizedBox.shrink(); // SearchInitial
+      ),
+      SearchError(:final error) => Center(child: Text(error)),
+      SearchInitial() => const SizedBox.shrink(),
+    };
   }
 }
 

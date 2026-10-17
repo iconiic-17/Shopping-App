@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shopping_app/core/widgets/app_product_card.dart';
 import 'package:shopping_app/core/widgets/product_item_card.dart';
+import 'package:shopping_app/features/details/presentation/view/screen/product_details_screen.dart';
 import 'package:shopping_app/features/home/domain/entities/product_response_entity.dart';
 import 'package:shopping_app/features/home/presentation/view_model/products_by_category_cubit.dart';
 import 'package:shopping_app/features/home/presentation/view_model/products_by_category_state.dart';
@@ -90,7 +91,7 @@ class ProductsByCategoryScreen extends StatelessWidget {
                     discount: entity.discountPercentage,
                     price: entity.price,
                     rating: entity.rating,
-                    image: entity.images.first,
+                    image: entity.images.isNotEmpty ? entity.images.first : '',
                     favoriteOnTap: const Icon(Icons.favorite),
                   );
                 },
