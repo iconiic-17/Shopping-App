@@ -6,6 +6,7 @@ import 'package:shopping_app/core/common/widget/custtom_button.dart';
 import 'package:shopping_app/core/constants/app_assets.dart';
 import 'package:shopping_app/core/routes/app_routes.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -35,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Text(
                 'Welcome Back! 👋',
                 style: textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: AppFontWeight.bold,
                 ),
               ),
               const SizedBox(height: 8),
@@ -114,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       'Forgot Password?',
                       style: textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: AppFontWeight.semiBold,
                       ),
                     ),
                   ),
@@ -180,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       'Sign Up',
                       style: textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: AppFontWeight.bold,
                       ),
                     ),
                   ),

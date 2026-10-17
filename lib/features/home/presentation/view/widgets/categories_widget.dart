@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 import 'package:shopping_app/features/home/domain/entities/category_item_entity.dart';
 import 'package:shopping_app/features/home/presentation/view/screens/products_by_category_screen.dart';
 import 'package:shopping_app/features/home/presentation/view_model/home_cubit.dart';
@@ -91,7 +92,7 @@ class _CategoryItem extends StatelessWidget {
           child: Text(
             name,
             style: theme.textTheme.labelMedium?.copyWith(
-              fontWeight: FontWeight.w600,
+              fontWeight: AppFontWeight.semiBold,
             ),
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 
 class WishlistCategoryChips extends StatelessWidget {
   const WishlistCategoryChips({
@@ -49,7 +50,7 @@ class WishlistCategoryChips extends StatelessWidget {
                   color: isSelected
                       ? theme.colorScheme.onPrimary
                       : theme.colorScheme.onSurface,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: AppFontWeight.semiBold,
                   fontSize: 13,
                 ),
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 
 class QuantityStepper extends StatelessWidget {
   const QuantityStepper({
@@ -26,9 +27,9 @@ class QuantityStepper extends StatelessWidget {
           child: Text(
             '$quantity',
             style: textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w700,
+                  fontWeight: AppFontWeight.bold,
                 ) ??
-                const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                const TextStyle(fontWeight: AppFontWeight.bold, fontSize: 16),
           ),
         ),
         _RoundIcon(icon: Icons.add, onTap: onIncrement),

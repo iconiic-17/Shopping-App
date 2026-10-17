@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
+import 'package:shopping_app/core/theme/app_text_styles.dart';
 
 abstract class AppTheme {
   static ThemeData light = ThemeData(
@@ -17,11 +19,7 @@ abstract class AppTheme {
       backgroundColor: AppColors.backGroundGrey,
       centerTitle: true,
       foregroundColor: AppColors.black,
-      titleTextStyle: TextStyle(
-        fontSize: 22,
-        fontWeight: FontWeight.w600,
-        color: AppColors.black,
-      ),
+      titleTextStyle: AppTextStyles.font22SemiBold,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -34,7 +32,7 @@ abstract class AppTheme {
         ),
         textStyle: const TextStyle(
           fontSize: 16,
-          fontWeight: FontWeight.w700,
+          fontWeight: AppFontWeight.bold,
         ),
       ),
     ),
@@ -47,7 +45,7 @@ abstract class AppTheme {
         ),
         textStyle: const TextStyle(
           fontSize: 16,
-          fontWeight: FontWeight.w700,
+          fontWeight: AppFontWeight.bold,
         ),
       ),
     ),
@@ -56,11 +54,7 @@ abstract class AppTheme {
       fillColor: AppColors.fieldFill,
       prefixIconColor: AppColors.textSecondary,
       suffixIconColor: AppColors.textSecondary,
-      hintStyle: const TextStyle(
-        fontWeight: FontWeight.w400,
-        fontSize: 14,
-        color: AppColors.textHint,
-      ),
+      hintStyle: AppTextStyles.font14Regular,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
@@ -88,66 +82,22 @@ abstract class AppTheme {
       ),
     ),
     textTheme: const TextTheme(
-      headlineLarge: TextStyle(
-        fontSize: 32,
-        fontWeight: FontWeight.bold,
-        color: AppColors.textPrimary,
-      ),
-      headlineMedium: TextStyle(
-        fontSize: 28,
-        fontWeight: FontWeight.bold,
-        color: AppColors.textPrimary,
-      ),
-      headlineSmall: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.w700,
-        color: AppColors.textPrimary,
-      ),
-      titleLarge: TextStyle(
-        fontSize: 22,
-        fontWeight: FontWeight.w700,
-        color: AppColors.textPrimary,
-      ),
-      titleMedium: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
-      ),
-      titleSmall: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
-      ),
-      bodyLarge: TextStyle(
-        color: AppColors.textPrimary,
-        fontSize: 18,
-        fontWeight: FontWeight.w500,
-      ),
-      bodyMedium: TextStyle(
-        fontSize: 16,
-        color: AppColors.textPrimary,
-        fontWeight: FontWeight.w400,
-      ),
-      bodySmall: TextStyle(
-        fontSize: 12,
-        color: AppColors.textSecondary,
-        fontWeight: FontWeight.w400,
-      ),
+      headlineLarge: AppTextStyles.font32Bold,
+      headlineMedium: AppTextStyles.font28Bold,
+      headlineSmall: AppTextStyles.font24Bold,
+      titleLarge: AppTextStyles.font22Bold,
+      titleMedium: AppTextStyles.font16SemiBold,
+      titleSmall: AppTextStyles.font14SemiBold,
+      bodyLarge: AppTextStyles.font18Medium,
+      bodyMedium: AppTextStyles.font16Regular,
+      bodySmall: AppTextStyles.font12Regular,
       labelLarge: TextStyle(
         fontSize: 16,
         color: AppColors.white,
-        fontWeight: FontWeight.w700,
+        fontWeight: AppFontWeight.bold,
       ),
-      labelMedium: TextStyle(
-        fontSize: 14,
-        color: AppColors.textSecondary,
-        fontWeight: FontWeight.w500,
-      ),
-      labelSmall: TextStyle(
-        fontSize: 11,
-        color: AppColors.textSecondary,
-        fontWeight: FontWeight.w500,
-      ),
+      labelMedium: AppTextStyles.font14Medium,
+      labelSmall: AppTextStyles.font11Medium,
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       elevation: 40,
@@ -155,10 +105,13 @@ abstract class AppTheme {
       backgroundColor: AppColors.backGroundGrey,
       selectedItemColor: AppColors.orangeLight,
       unselectedItemColor: AppColors.greyDark,
-      selectedLabelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+      selectedLabelStyle: TextStyle(
+        fontSize: 14,
+        fontWeight: AppFontWeight.medium,
+      ),
       unselectedLabelStyle: TextStyle(
         fontSize: 14,
-        fontWeight: FontWeight.w500,
+        fontWeight: AppFontWeight.medium,
       ),
       selectedIconTheme: IconThemeData(size: 24),
     ),

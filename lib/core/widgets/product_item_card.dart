@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 import 'package:shopping_app/core/widgets/safe_network_image.dart';
 
 enum ProductCardLayout { grid, list }
@@ -127,7 +128,7 @@ class _GridCard extends StatelessWidget {
                             fontSize: 10,
                             letterSpacing: 0.4,
                             color: AppColors.textSecondary,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: AppFontWeight.semiBold,
                           ),
                         ),
                       ),
@@ -140,7 +141,7 @@ class _GridCard extends StatelessWidget {
                       Text(
                         parent.rating.toStringAsFixed(1),
                         style: const TextStyle(
-                          fontWeight: FontWeight.w700,
+                          fontWeight: AppFontWeight.bold,
                           fontSize: 12,
                         ),
                       ),
@@ -152,7 +153,7 @@ class _GridCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontWeight: FontWeight.w700,
+                      fontWeight: AppFontWeight.bold,
                       fontSize: 14,
                     ),
                   ),
@@ -162,7 +163,7 @@ class _GridCard extends StatelessWidget {
                       Text(
                         '${parent.price.toStringAsFixed(0)} \$',
                         style: const TextStyle(
-                          fontWeight: FontWeight.w800,
+                          fontWeight: AppFontWeight.extraBold,
                           fontSize: 16,
                           color: AppColors.primary,
                         ),
@@ -261,7 +262,7 @@ class _ListCard extends StatelessWidget {
                             fontSize: 10,
                             letterSpacing: 0.4,
                             color: AppColors.textSecondary,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: AppFontWeight.semiBold,
                           ),
                         ),
                       ),
@@ -273,7 +274,7 @@ class _ListCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontWeight: FontWeight.w700,
+                      fontWeight: AppFontWeight.bold,
                       fontSize: 15,
                     ),
                   ),
@@ -283,7 +284,7 @@ class _ListCard extends StatelessWidget {
                       Text(
                         '${parent.price.toStringAsFixed(0)} \$',
                         style: const TextStyle(
-                          fontWeight: FontWeight.w800,
+                          fontWeight: AppFontWeight.extraBold,
                           fontSize: 16,
                           color: AppColors.primary,
                         ),
@@ -309,7 +310,7 @@ class _ListCard extends StatelessWidget {
                       Text(
                         parent.rating.toStringAsFixed(1),
                         style: const TextStyle(
-                          fontWeight: FontWeight.w700,
+                          fontWeight: AppFontWeight.bold,
                           fontSize: 12,
                         ),
                       ),
@@ -381,7 +382,7 @@ class _Badge extends StatelessWidget {
         style: const TextStyle(
           color: AppColors.white,
           fontSize: 10,
-          fontWeight: FontWeight.w800,
+          fontWeight: AppFontWeight.extraBold,
         ),
       ),
     );
@@ -411,7 +412,7 @@ class _AddToCartButton extends StatelessWidget {
           foregroundColor: AppColors.white,
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+          textStyle: const TextStyle(fontSize: 12, fontWeight: AppFontWeight.bold),
           shape: const StadiumBorder(),
         ),
       ),

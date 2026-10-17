@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 
 class FavouriteEmptyState extends StatelessWidget {
   const FavouriteEmptyState({super.key});
@@ -21,7 +22,7 @@ class FavouriteEmptyState extends StatelessWidget {
           Text(
             'No favourite items yet',
             style: textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w700,
+              fontWeight: AppFontWeight.bold,
               fontSize: 18,
             ),
           ),

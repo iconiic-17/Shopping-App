@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/di/service_locator.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 import 'package:shopping_app/features/account/presentation/view/screens/account_screen.dart';
 import 'package:shopping_app/features/app_section/view_model/app_section_cubit.dart';
 import 'package:shopping_app/features/app_section/view_model/app_section_state.dart';
@@ -66,11 +67,11 @@ class _AppSectionViewState extends State<AppSectionView> {
               unselectedItemColor: AppColors.textSecondary,
               selectedLabelStyle: const TextStyle(
                 fontSize: 12,
-                fontWeight: FontWeight.w600,
+                fontWeight: AppFontWeight.semiBold,
               ),
               unselectedLabelStyle: const TextStyle(
                 fontSize: 12,
-                fontWeight: FontWeight.w400,
+                fontWeight: AppFontWeight.regular,
               ),
               items: const [
                 BottomNavigationBarItem(

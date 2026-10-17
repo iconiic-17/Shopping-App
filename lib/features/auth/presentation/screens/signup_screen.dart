@@ -4,6 +4,7 @@ import 'package:shopping_app/core/common/widget/custtom_button.dart';
 
 import 'package:shopping_app/core/routes/app_routes.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -45,7 +46,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Text(
                 'Create Account ✨',
                 style: textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: AppFontWeight.bold,
                 ),
               ),
               const SizedBox(height: 8),
@@ -141,7 +142,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             text: 'Terms of Service',
                             style: TextStyle(
                               color: theme.colorScheme.primary,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: AppFontWeight.semiBold,
                             ),
                           ),
                           const TextSpan(text: ' and '),
@@ -149,7 +150,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             text: 'Privacy Policy',
                             style: TextStyle(
                               color: theme.colorScheme.primary,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: AppFontWeight.semiBold,
                             ),
                           ),
                         ],
@@ -185,7 +186,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       'Sign In',
                       style: textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: AppFontWeight.bold,
                       ),
                     ),
                   ),

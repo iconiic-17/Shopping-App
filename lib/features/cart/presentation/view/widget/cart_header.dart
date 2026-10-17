@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 
 class CartHeader extends StatelessWidget {
   const CartHeader({super.key, required this.onClear, required this.canClear});
@@ -30,7 +31,7 @@ class CartHeader extends StatelessWidget {
             child: Text(
               'Your Cart',
               style: textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w800,
+                fontWeight: AppFontWeight.extraBold,
               ),
             ),
           ),

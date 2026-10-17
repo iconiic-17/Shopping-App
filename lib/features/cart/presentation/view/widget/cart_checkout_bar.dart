@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 
 class CartCheckoutBar extends StatelessWidget {
   const CartCheckoutBar({
@@ -51,7 +52,7 @@ class CartCheckoutBar extends StatelessWidget {
                 'Proceed to Checkout  →',
                 style: textTheme.titleMedium?.copyWith(
                   color: theme.colorScheme.onPrimary,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: AppFontWeight.extraBold,
                 ),
               ),
             ),
@@ -82,11 +83,11 @@ class _Row extends StatelessWidget {
 
     final style = isBold
         ? textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w800,
+            fontWeight: AppFontWeight.extraBold,
             fontSize: 18,
           )
         : textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.w500,
+            fontWeight: AppFontWeight.medium,
             fontSize: 15,
           );
 

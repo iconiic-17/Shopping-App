@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 import 'package:shopping_app/core/widgets/quantity_stepper.dart';
 import 'package:shopping_app/core/widgets/safe_network_image.dart';
 import 'package:shopping_app/features/cart/domain/entities/item_entity.dart';
@@ -64,7 +65,7 @@ class CartItemWidget extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
+                        fontWeight: AppFontWeight.bold,
                       ),
                     ),
                     if (meta.isNotEmpty) ...[
@@ -81,7 +82,7 @@ class CartItemWidget extends StatelessWidget {
                       '\$${item.price.toStringAsFixed(2)}',
                       style: textTheme.titleMedium?.copyWith(
                         color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: AppFontWeight.extraBold,
                       ),
                     ),
                   ],
@@ -106,7 +107,7 @@ class CartItemWidget extends StatelessWidget {
               Text(
                 '\$${item.lineTotal.toStringAsFixed(2)}',
                 style: textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w800,
+                  fontWeight: AppFontWeight.extraBold,
                 ),
               ),
             ],

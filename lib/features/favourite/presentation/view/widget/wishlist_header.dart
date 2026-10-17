@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 
 class WishlistHeader extends StatelessWidget {
   const WishlistHeader({
@@ -27,7 +28,7 @@ class WishlistHeader extends StatelessWidget {
           Text(
             'My Wishlist',
             style: textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w800,
+              fontWeight: AppFontWeight.extraBold,
             ),
           ),
           const SizedBox(width: 8),
@@ -41,7 +42,7 @@ class WishlistHeader extends StatelessWidget {
               '$count',
               style: textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.primary,
-                fontWeight: FontWeight.w800,
+                fontWeight: AppFontWeight.extraBold,
               ),
             ),
           ),

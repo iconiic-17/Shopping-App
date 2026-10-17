@@ -4,6 +4,7 @@ import 'package:shopping_app/core/common/widget/custtom_button.dart';
 import 'package:shopping_app/core/constants/app_assets.dart';
 import 'package:shopping_app/core/routes/app_routes.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 
 class HelloScreen extends StatelessWidget {
   const HelloScreen({super.key});
@@ -28,7 +29,7 @@ class HelloScreen extends StatelessWidget {
                 'Hello!',
                 style: TextStyle(
                   fontSize: 34,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: AppFontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
               ),

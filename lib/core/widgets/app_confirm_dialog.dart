@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 
 class AppConfirmDialog {
   static Future<bool> show(
@@ -49,7 +50,7 @@ class AppConfirmDialog {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: AppFontWeight.extraBold,
                   ),
                 ),
                 const SizedBox(height: 8),

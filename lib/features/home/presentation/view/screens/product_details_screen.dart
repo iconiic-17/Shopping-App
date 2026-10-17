@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 import 'package:shopping_app/core/widgets/safe_network_image.dart';
 import 'package:shopping_app/features/cart/presentation/view_model/cart_cubit.dart';
 import 'package:shopping_app/features/favourite/presentation/view_model/favourite_cubit.dart';
@@ -63,7 +64,7 @@ class ProductDetailsScreen extends StatelessWidget {
                           product.category.toUpperCase(),
                           style: const TextStyle(
                             color: AppColors.textSecondary,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: AppFontWeight.bold,
                             letterSpacing: 0.6,
                           ),
                         ),
@@ -72,7 +73,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         product.title,
                         style: const TextStyle(
                           fontSize: 24,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: AppFontWeight.extraBold,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -82,7 +83,7 @@ class ProductDetailsScreen extends StatelessWidget {
                             '${product.price.toStringAsFixed(2)} \$',
                             style: const TextStyle(
                               fontSize: 22,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: AppFontWeight.extraBold,
                               color: AppColors.primary,
                             ),
                           ),
@@ -91,7 +92,7 @@ class ProductDetailsScreen extends StatelessWidget {
                           const SizedBox(width: 4),
                           Text(
                             product.rating.toStringAsFixed(1),
-                            style: const TextStyle(fontWeight: FontWeight.w700),
+                            style: const TextStyle(fontWeight: AppFontWeight.bold),
                           ),
                         ],
                       ),
@@ -132,7 +133,7 @@ class ProductDetailsScreen extends StatelessWidget {
                     elevation: 0,
                     shape: const StadiumBorder(),
                     textStyle: const TextStyle(
-                      fontWeight: FontWeight.w800,
+                      fontWeight: AppFontWeight.extraBold,
                       fontSize: 16,
                     ),
                   ),

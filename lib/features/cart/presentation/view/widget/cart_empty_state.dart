@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 
 class CartEmptyState extends StatelessWidget {
   const CartEmptyState({super.key});
@@ -21,7 +22,7 @@ class CartEmptyState extends StatelessWidget {
           Text(
             'Your cart is empty',
             style: textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w700,
+              fontWeight: AppFontWeight.bold,
               fontSize: 18,
             ),
           ),

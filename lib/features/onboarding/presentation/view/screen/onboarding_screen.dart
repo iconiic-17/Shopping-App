@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:shopping_app/core/routes/app_routes.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
+import 'package:shopping_app/core/theme/app_font_weight.dart';
 import 'package:shopping_app/core/utils/app_prefs.dart';
 import 'package:shopping_app/features/onboarding/data/onboarding_data.dart';
 
@@ -96,7 +97,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 28,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: AppFontWeight.extraBold,
                               color: AppColors.textPrimary,
                               height: 1.2,
                               letterSpacing: -0.5,
@@ -147,7 +148,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   'Skip',
                   style: TextStyle(
                     color: AppColors.textPrimary,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: AppFontWeight.semiBold,
                     fontSize: 15,
                   ),
                 ),
@@ -207,7 +208,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               'Get Started',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: AppFontWeight.bold,
                                 fontSize: 16,
                               ),
                             )
