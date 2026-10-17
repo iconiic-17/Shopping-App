@@ -68,7 +68,7 @@ class _CategoryItem extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Material(
-      color: AppColors.black.withOpacity(0.06),
+      color: AppColors.black.withValues(alpha: 0.06),
       borderRadius: BorderRadius.circular(50),
       child: InkWell(
         borderRadius: BorderRadius.circular(50),
@@ -86,7 +86,7 @@ class _CategoryItem extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
-            border: Border.all(color: AppColors.black.withOpacity(0.12)),
+            border: Border.all(color: AppColors.black.withValues(alpha: 0.12)),
           ),
           child: Text(
             name,

@@ -8,11 +8,8 @@ import 'package:shopping_app/features/home/domain/entities/product_response_enti
 
 @lazySingleton
 class CartCubit extends Cubit<CartState> {
-  CartCubit(
-    this._getCartUseCase,
-    this._addCartUseCase,
-    this._deleteCartUseCase,
-  ) : super(CartInitial());
+  CartCubit(this._getCartUseCase, this._addCartUseCase, this._deleteCartUseCase)
+    : super(CartInitial());
 
   final GetCartUseCase _getCartUseCase;
   final AddCartUseCase _addCartUseCase;
@@ -36,8 +33,7 @@ class CartCubit extends Cubit<CartState> {
       case Success<List<CartItemEntity>>():
         // Merge: keep locally-added items that the API doesn't know about yet.
         final apiIds = result.data.map((e) => e.id).toSet();
-        final localOnly =
-            _items.where((e) => !apiIds.contains(e.id)).toList();
+        final localOnly = _items.where((e) => !apiIds.contains(e.id)).toList();
         _items = [...result.data, ...localOnly];
         emit(CartSuccess(List.from(_items), totalPrice));
       case Error<List<CartItemEntity>>():
@@ -112,12 +108,5 @@ class CartCubit extends Cubit<CartState> {
       emit(CartActionSuccess(message, List.from(_items), totalPrice));
     }
     emit(CartSuccess(List.from(_items), totalPrice));
-  }
-
-  Future<void> _refreshQuietly() async {
-    final result = await _getCartUseCase.invoke();
-    if (result is Success<List<CartItemEntity>>) {
-      _items = result.data;
-    }
   }
 }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:shopping_app/core/theme/app_colors.dart';
-
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
@@ -40,12 +38,7 @@ class CustomTextField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: theme.textTheme.titleSmall ??
-              const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
-              ),
+          style: theme.textTheme.titleSmall,
         ),
         const SizedBox(height: 8),
         TextFormField(
@@ -55,15 +48,12 @@ class CustomTextField extends StatelessWidget {
           validator: validator,
           decoration: InputDecoration(
             hintText: effectiveHint,
-            prefixIcon: prefixIcon == null
-                ? null
-                : Icon(prefixIcon, color: AppColors.textSecondary),
+            prefixIcon: prefixIcon == null ? null : Icon(prefixIcon),
             suffixIcon: isPassword
                 ? IconButton(
                     onPressed: onToggleVisibility,
                     icon: Icon(
                       obscureText ? Icons.visibility_off : Icons.visibility,
-                      color: AppColors.textSecondary,
                     ),
                   )
                 : suffixIcon,

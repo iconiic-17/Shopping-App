@@ -17,25 +17,30 @@ class WishlistHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
       child: Row(
         children: [
-          const Text(
+          Text(
             'My Wishlist',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+            style: textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w800,
+            ),
           ),
           const SizedBox(width: 8),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
             decoration: BoxDecoration(
-              color: const Color(0xFFFFE1C6),
+              color: theme.colorScheme.primary.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
               '$count',
-              style: const TextStyle(
-                color: AppColors.primary,
+              style: textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.primary,
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -49,7 +54,7 @@ class WishlistHeader extends StatelessWidget {
             onPressed: count > 0 ? onClear : null,
             icon: Icon(
               Icons.delete_outline,
-              color: count > 0 ? AppColors.textPrimary : AppColors.textHint,
+              color: count > 0 ? theme.colorScheme.onSurface : AppColors.textHint,
             ),
           ),
         ],

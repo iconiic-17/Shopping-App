@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app/core/theme/app_colors.dart';
 
 class CartHeader extends StatelessWidget {
   const CartHeader({super.key, required this.onClear, required this.canClear});
@@ -39,7 +38,9 @@ class CartHeader extends StatelessWidget {
             onPressed: canClear ? onClear : null,
             icon: Icon(
               Icons.delete_outline,
-              color: canClear ? AppColors.textPrimary : AppColors.textHint,
+              color: canClear
+                  ? theme.colorScheme.onSurface
+                  : theme.disabledColor,
             ),
           ),
         ],

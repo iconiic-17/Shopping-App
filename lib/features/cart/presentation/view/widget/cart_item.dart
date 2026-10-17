@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app/core/theme/app_colors.dart';
 import 'package:shopping_app/core/widgets/quantity_stepper.dart';
 import 'package:shopping_app/core/widgets/safe_network_image.dart';
 import 'package:shopping_app/features/cart/domain/entities/item_entity.dart';
@@ -32,7 +31,7 @@ class CartItemWidget extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
@@ -73,7 +72,7 @@ class CartItemWidget extends StatelessWidget {
                       Text(
                         meta,
                         style: textTheme.bodySmall?.copyWith(
-                          color: AppColors.textSecondary,
+                          color: theme.colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],
@@ -91,7 +90,7 @@ class CartItemWidget extends StatelessWidget {
               IconButton(
                 onPressed: onDelete,
                 icon: const Icon(Icons.close, size: 20),
-                color: AppColors.textSecondary,
+                color: theme.colorScheme.onSurfaceVariant,
               ),
             ],
           ),

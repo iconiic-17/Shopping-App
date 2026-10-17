@@ -54,6 +54,8 @@ abstract class AppTheme {
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.fieldFill,
+      prefixIconColor: AppColors.textSecondary,
+      suffixIconColor: AppColors.textSecondary,
       hintStyle: const TextStyle(
         fontWeight: FontWeight.w400,
         fontSize: 14,

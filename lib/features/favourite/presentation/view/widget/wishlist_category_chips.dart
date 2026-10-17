@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app/core/theme/app_colors.dart';
 
 class WishlistCategoryChips extends StatelessWidget {
   const WishlistCategoryChips({
@@ -15,6 +14,9 @@ class WishlistCategoryChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
     return SizedBox(
       height: 40,
       child: ListView.separated(
@@ -31,16 +33,22 @@ class WishlistCategoryChips extends StatelessWidget {
               duration: const Duration(milliseconds: 180),
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : AppColors.white,
+                color: isSelected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.surface,
                 borderRadius: BorderRadius.circular(22),
                 border: Border.all(
-                  color: isSelected ? AppColors.primary : AppColors.divider,
+                  color: isSelected
+                      ? theme.colorScheme.primary
+                      : theme.dividerColor,
                 ),
               ),
               child: Text(
                 name,
-                style: TextStyle(
-                  color: isSelected ? AppColors.white : AppColors.textPrimary,
+                style: textTheme.labelMedium?.copyWith(
+                  color: isSelected
+                      ? theme.colorScheme.onPrimary
+                      : theme.colorScheme.onSurface,
                   fontWeight: FontWeight.w600,
                   fontSize: 13,
                 ),

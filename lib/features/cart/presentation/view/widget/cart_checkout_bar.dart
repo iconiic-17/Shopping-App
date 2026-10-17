@@ -13,11 +13,14 @@ class CartCheckoutBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-      decoration: const BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
         children: [
@@ -41,14 +44,15 @@ class CartCheckoutBar extends StatelessWidget {
             child: ElevatedButton(
               onPressed: onCheckout,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.white,
                 elevation: 0,
                 shape: const StadiumBorder(),
               ),
-              child: const Text(
+              child: Text(
                 'Proceed to Checkout  →',
-                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                style: textTheme.titleMedium?.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
           ),
@@ -73,15 +77,24 @@ class _Row extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = TextStyle(
-      fontSize: isBold ? 18 : 15,
-      fontWeight: isBold ? FontWeight.w800 : FontWeight.w500,
-    );
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
+    final style = isBold
+        ? textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w800,
+            fontSize: 18,
+          )
+        : textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.w500,
+            fontSize: 15,
+          );
+
     return Row(
       children: [
         Text(label, style: style),
         const Spacer(),
-        Text(value, style: style.copyWith(color: valueColor)),
+        Text(value, style: style?.copyWith(color: valueColor)),
       ],
     );
   }
