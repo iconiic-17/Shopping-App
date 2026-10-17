@@ -9,8 +9,8 @@ Future<String> initialRoute() async {
   final token = await storage.read(AppKeys.token);
 
   if (token.isNotEmpty) {
-    return AppRoutes.register;
+    return AppRoutes.appSection;
   } else {
-    return AppRoutes.home;
+    return AppRoutes.register;
   }
 }

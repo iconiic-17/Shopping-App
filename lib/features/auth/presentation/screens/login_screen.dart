@@ -62,6 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
         listener: (context, state) {
           if (state is LoginSuccess) {
             Navigator.of(context).pop();
+            Navigator.of(context).pushNamed(AppRoutes.appSection);
             _showMessage(context, state.message, Colors.green);
           } else if (state is LoginError) {
             _showMessage(context, state.error, Colors.redAccent);
