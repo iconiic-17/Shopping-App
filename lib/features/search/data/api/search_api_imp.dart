@@ -3,14 +3,18 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/constants/api_constants.dart';
+import 'package:shopping_app/core/constants/app_keys.dart';
+import 'package:shopping_app/core/helper/flutter_secure_storage.dart';
 import 'package:shopping_app/core/network/result_api.dart';
-import 'package:shopping_app/features/home/data/api/home_api_imp.dart'
-    show token;
 import 'package:shopping_app/features/home/data/model/product_response_dto.dart';
 import 'package:shopping_app/features/search/data/api/search_api_interface.dart';
 
 @Injectable(as: SearchApiInterface)
 class SearchApiImp implements SearchApiInterface {
+  SearchApiImp(this._storage);
+
+  final AppSecureStorage _storage;
+
   static const String _queryKey = 'search';
 
   @override
@@ -19,6 +23,8 @@ class SearchApiImp implements SearchApiInterface {
       final Uri url = Uri.parse(
         '${ApiConstants.baseUrl}${ApiConstants.search}',
       );
+
+      final token = await _storage.read(AppKeys.token);
 
       final http.Response response = await http
           .post(

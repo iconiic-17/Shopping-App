@@ -1,18 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/constants/api_constants.dart';
-import 'package:shopping_app/features/home/data/api/home_api_imp.dart'
-    show token;
+import 'package:shopping_app/core/constants/app_keys.dart';
+import 'package:shopping_app/core/helper/flutter_secure_storage.dart';
 
 @module
 abstract class NetworkModule {
   @lazySingleton
-  Dio dio() {
+  Dio dio(AppSecureStorage storage) {
     final dio = Dio(
       BaseOptions(
         // Trailing slash + relative paths keeps `/api/v1` in the final URL.
-        // A path like `/user/getCart` would otherwise resolve to
-        // `https://host/user/getCart` and drop the API prefix.
         baseUrl: '${ApiConstants.baseUrl}/',
         connectTimeout: const Duration(seconds: 30),
         receiveTimeout: const Duration(seconds: 30),
@@ -21,8 +19,12 @@ abstract class NetworkModule {
     );
     dio.interceptors.add(
       InterceptorsWrapper(
-        onRequest: (options, handler) {
-          options.headers['Authorization'] = 'Bearer $token';
+        onRequest: (options, handler) async {
+          final token = await storage.read(AppKeys.token);
+          if (token.isNotEmpty) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
+
           final path = options.path;
           final isAbsolute =
               path.startsWith('http://') || path.startsWith('https://');
