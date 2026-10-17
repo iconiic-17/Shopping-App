@@ -10,8 +10,11 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i694;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:shopping_app/core/di/register_modules.dart' as _i996;
+import 'package:shopping_app/core/helper/flutter_secure_storage.dart' as _i247;
 import 'package:shopping_app/features/auth/data/api/auth_api.dart' as _i870;
 import 'package:shopping_app/features/auth/data/repo/auth_data_source_impl.dart'
     as _i590;
@@ -20,11 +23,11 @@ import 'package:shopping_app/features/auth/data/repo/auth_repo_impl.dart'
 import 'package:shopping_app/features/auth/domain/repo/auth_data_source_interface.dart'
     as _i945;
 import 'package:shopping_app/features/auth/domain/repo/auth_repo_interface.dart'
-    as _i247;
+    as _i817;
 import 'package:shopping_app/features/auth/domain/use_case/login_use_case.dart'
     as _i768;
 import 'package:shopping_app/features/auth/domain/use_case/register_use_case.dart'
-    as _i817;
+    as _i83;
 import 'package:shopping_app/features/auth/presentation/view_model/login/login_cubit.dart'
     as _i346;
 import 'package:shopping_app/features/auth/presentation/view_model/register/register_cubit.dart'
@@ -74,30 +77,33 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
-    final RegisterModule = _$RegisterModule();
+    final registerModule = _$RegisterModule();
     gh.factory<_i870.AuthApi>(() => _i870.AuthApi());
     gh.factory<_i945.AuthDataSourceInterface>(
       () => _i590.AuthDataSourceImpl(gh<_i870.AuthApi>()),
     );
     gh.factory<_i824.HomeApiInterface>(() => _i27.HomeApiImp());
-    gh.factory<_.FlutterSecureStorage>(
-      () => RegisterModule.flutterSecureStorage,
+    gh.lazySingleton<_i694.FlutterSecureStorage>(
+      () => registerModule.storage,
+    );
+    gh.lazySingleton<_i247.AppSecureStorage>(
+      () => _i247.AppSecureStorage(gh<_i694.FlutterSecureStorage>()),
     );
     gh.factory<_i209.SearchApiInterface>(() => _i0.SearchApiImp());
     gh.factory<_i879.HomeDataSourceInterface>(
       () => _i797.HomeDataSourceImp(gh<_i824.HomeApiInterface>()),
     );
-    gh.factory<_i247.AuthRepoInterface>(
-      () => _i741.AuthRepoImpl(gh<_i945.AuthDataSourceInterface>()),
+    gh.factory<_i817.AuthRepoInterface>(
+      () => _i741.AuthRepoImpl(
+        gh<_i945.AuthDataSourceInterface>(),
+        gh<_i247.AppSecureStorage>(),
+      ),
     );
     gh.factory<_i768.LoginUseCase>(
-      () => _i768.LoginUseCase(gh<_i247.AuthRepoInterface>()),
+      () => _i768.LoginUseCase(gh<_i817.AuthRepoInterface>()),
     );
-    gh.factory<_i817.RegisterUseCase>(
-      () => _i817.RegisterUseCase(gh<_i247.AuthRepoInterface>()),
-    );
-    gh.factory<_i817.AppSecureStorage>(
-      () => _i817.AppSecureStorage(gh<_i247.FlutterSecureStorage>()),
+    gh.factory<_i83.RegisterUseCase>(
+      () => _i83.RegisterUseCase(gh<_i817.AuthRepoInterface>()),
     );
     gh.factory<_i346.LoginCubit>(
       () => _i346.LoginCubit(gh<_i768.LoginUseCase>()),
@@ -109,7 +115,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i529.HomeRepoImp(gh<_i879.HomeDataSourceInterface>()),
     );
     gh.factory<_i82.RegisterCubit>(
-      () => _i82.RegisterCubit(gh<_i817.RegisterUseCase>()),
+      () => _i82.RegisterCubit(gh<_i83.RegisterUseCase>()),
     );
     gh.factory<_i634.GetAllCategoriesUseCase>(
       () => _i634.GetAllCategoriesUseCase(gh<_i191.HomeRepoInterface>()),
@@ -143,3 +149,5 @@ extension GetItInjectableX on _i174.GetIt {
     return this;
   }
 }
+
+class _$RegisterModule extends _i996.RegisterModule {}

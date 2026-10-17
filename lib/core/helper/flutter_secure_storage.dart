@@ -2,23 +2,24 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton
- class AppSecureStorage {
- FlutterSecureStorage _storage ();
+class AppSecureStorage {
+  final FlutterSecureStorage _storage;
 
   AppSecureStorage(this._storage);
 
-Future<void> write(String token) async {
-  await _storage.write(key: 'token', value: token);
-}
+  Future<void> write(String key, String value) async {
+    await _storage.write(key: key, value: value);
+  }
 
-Future<String> read() async {
-  return await _storage.read(key: 'token') ?? '';
-}
+  Future<String> read(String key) async {
+    return await _storage.read(key: key) ?? '';
+  }
 
-Future<void> delete() async {
-  await _storage.delete(key: 'token');
-}
-Future<void>deleteAll()async{
-  await _storage.deleteAll();
-}
+  Future<void> delete(String key) async {
+    await _storage.delete(key: key);
+  }
+
+  Future<void> deleteAll() async {
+    await _storage.deleteAll();
+  }
 }

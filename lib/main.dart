@@ -4,6 +4,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'core/di/service_locator.dart';
 import 'core/routes/app_router.dart';
 import 'core/routes/app_routes.dart';
+import 'core/routes/initial_route.dart';
 import 'core/theme/app_theme.dart';
 import 'core/utils/app_prefs.dart';
 
@@ -15,8 +16,8 @@ void main() async {
 
   final isFirstTime = await AppPrefs.isFirstTime();
   FlutterNativeSplash.remove();
-  final  initialRoute=await initialRoute();
-  runApp(MyApp(isFirstTime: isFirstTime,initialRoute: initialRoute,));
+  final startRoute = await initialRoute();
+  runApp(MyApp(isFirstTime: isFirstTime, initialRoute: startRoute));
 }
 
 class MyApp extends StatelessWidget {
