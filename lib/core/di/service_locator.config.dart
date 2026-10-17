@@ -11,8 +11,11 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 
 import 'package:dio/dio.dart' as _i361;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:shopping_app/core/di/register_module.dart' as _i524;
+import 'package:shopping_app/core/helper/flutter_secure_storage.dart' as _i626;
 import 'package:shopping_app/core/network/dio_module.dart' as _i676;
 import 'package:shopping_app/features/auth/data/api/auth_api.dart' as _i870;
 import 'package:shopping_app/features/auth/data/repo/auth_data_source_impl.dart'
@@ -23,8 +26,12 @@ import 'package:shopping_app/features/auth/domain/repo/auth_data_source_interfac
     as _i945;
 import 'package:shopping_app/features/auth/domain/repo/auth_repo_interface.dart'
     as _i247;
+import 'package:shopping_app/features/auth/domain/use_case/login_use_case.dart'
+    as _i768;
 import 'package:shopping_app/features/auth/domain/use_case/register_use_case.dart'
     as _i817;
+import 'package:shopping_app/features/auth/presentation/view_model/login/login_cubit.dart'
+    as _i346;
 import 'package:shopping_app/features/auth/presentation/view_model/register/register_cubit.dart'
     as _i82;
 import 'package:shopping_app/features/cart/data/repo/cart_data_source_imp.dart'
@@ -39,6 +46,22 @@ import 'package:shopping_app/features/cart/domain/use_case/get_item_use_case.dar
     as _i345;
 import 'package:shopping_app/features/cart/presentation/view_model/cart_cubit.dart'
     as _i824;
+import 'package:shopping_app/features/details/data/api/product_details_api_imp.dart'
+    as _i954;
+import 'package:shopping_app/features/details/data/api/product_details_api_interface.dart'
+    as _i398;
+import 'package:shopping_app/features/details/data/repo/product_details_data_source_imp.dart'
+    as _i830;
+import 'package:shopping_app/features/details/data/repo/product_details_repo_imp.dart'
+    as _i283;
+import 'package:shopping_app/features/details/domain/repo/product_details_data_source_interface.dart'
+    as _i6;
+import 'package:shopping_app/features/details/domain/repo/product_details_repo_interface.dart'
+    as _i607;
+import 'package:shopping_app/features/details/domain/use_case/get_product_details_use_case.dart'
+    as _i343;
+import 'package:shopping_app/features/details/presentation/view_model/product_details_cubit.dart'
+    as _i225;
 import 'package:shopping_app/features/favourite/data/repo/favourite_data_source_imp.dart'
     as _i708;
 import 'package:shopping_app/features/favourite/data/repo/favourite_repo_imp.dart'
@@ -96,13 +119,23 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    final registerModule = _$RegisterModule();
     final networkModule = _$NetworkModule();
     gh.factory<_i870.AuthApi>(() => _i870.AuthApi());
+    gh.lazySingleton<_i558.FlutterSecureStorage>(
+      () => registerModule.secureStorage,
+    );
     gh.lazySingleton<_i361.Dio>(() => networkModule.dio());
     gh.factory<_i945.AuthDataSourceInterface>(
       () => _i590.AuthDataSourceImpl(gh<_i870.AuthApi>()),
     );
+    gh.factory<_i398.ProductDetailsApiInterface>(
+      () => _i954.ProductDetailsApiImp(),
+    );
     gh.factory<_i824.HomeApiInterface>(() => _i27.HomeApiImp());
+    gh.lazySingleton<_i626.AppSecureStorage>(
+      () => _i626.AppSecureStorage(gh<_i558.FlutterSecureStorage>()),
+    );
     gh.factory<_i267.FavouriteDataSourceInterface>(
       () => _i708.FavouriteDataSourceImp(gh<_i361.Dio>()),
     );
@@ -110,8 +143,19 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i752.CartDataSourceInterface>(
       () => _i69.CartDataSourceImp(gh<_i361.Dio>()),
     );
+    gh.factory<_i247.AuthRepoInterface>(
+      () => _i741.AuthRepoImpl(
+        gh<_i945.AuthDataSourceInterface>(),
+        gh<_i626.AppSecureStorage>(),
+      ),
+    );
     gh.factory<_i879.HomeDataSourceInterface>(
       () => _i797.HomeDataSourceImp(gh<_i824.HomeApiInterface>()),
+    );
+    gh.factory<_i6.ProductDetailsDataSourceInterface>(
+      () => _i830.ProductDetailsDataSourceImp(
+        gh<_i398.ProductDetailsApiInterface>(),
+      ),
     );
     gh.factory<_i783.CartRepoInterface>(
       () => _i1035.CartRepoImp(gh<_i752.CartDataSourceInterface>()),
@@ -119,8 +163,10 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i563.FavouriteRepoInterface>(
       () => _i1073.FavouriteRepoImp(gh<_i267.FavouriteDataSourceInterface>()),
     );
-    gh.factory<_i247.AuthRepoInterface>(
-      () => _i741.AuthRepoImpl(gh<_i945.AuthDataSourceInterface>()),
+    gh.factory<_i607.ProductDetailsRepoInterface>(
+      () => _i283.ProductDetailsRepoImp(
+        gh<_i6.ProductDetailsDataSourceInterface>(),
+      ),
     );
     gh.factory<_i413.GetFavouritesUseCase>(
       () => _i413.GetFavouritesUseCase(gh<_i563.FavouriteRepoInterface>()),
@@ -131,8 +177,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i413.DeleteFavouriteUseCase>(
       () => _i413.DeleteFavouriteUseCase(gh<_i563.FavouriteRepoInterface>()),
     );
+    gh.factory<_i768.LoginUseCase>(
+      () => _i768.LoginUseCase(gh<_i247.AuthRepoInterface>()),
+    );
     gh.factory<_i817.RegisterUseCase>(
       () => _i817.RegisterUseCase(gh<_i247.AuthRepoInterface>()),
+    );
+    gh.factory<_i346.LoginCubit>(
+      () => _i346.LoginCubit(gh<_i768.LoginUseCase>()),
     );
     gh.lazySingleton<_i443.FavouriteCubit>(
       () => _i443.FavouriteCubit(
@@ -156,6 +208,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i345.DeleteCartUseCase>(
       () => _i345.DeleteCartUseCase(gh<_i783.CartRepoInterface>()),
     );
+    gh.factory<_i343.GetProductDetailsUseCase>(
+      () => _i343.GetProductDetailsUseCase(
+        gh<_i607.ProductDetailsRepoInterface>(),
+      ),
+    );
     gh.lazySingleton<_i824.CartCubit>(
       () => _i824.CartCubit(
         gh<_i345.GetCartUseCase>(),
@@ -165,6 +222,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i82.RegisterCubit>(
       () => _i82.RegisterCubit(gh<_i817.RegisterUseCase>()),
+    );
+    gh.factory<_i225.ProductDetailsCubit>(
+      () => _i225.ProductDetailsCubit(gh<_i343.GetProductDetailsUseCase>()),
     );
     gh.factory<_i634.GetAllCategoriesUseCase>(
       () => _i634.GetAllCategoriesUseCase(gh<_i191.HomeRepoInterface>()),
@@ -198,5 +258,7 @@ extension GetItInjectableX on _i174.GetIt {
     return this;
   }
 }
+
+class _$RegisterModule extends _i524.RegisterModule {}
 
 class _$NetworkModule extends _i676.NetworkModule {}
