@@ -14,6 +14,7 @@ class ProductsByCategoryCubit extends Cubit<ProductsByCategoryState> {
   Future<void> getProducts(String slug) async {
     emit(PBCLoading());
     final result = await _useCase.invoke(slug);
+    if (isClosed) return;
 
     switch (result) {
       case Success<ProductResponseEntity>():
