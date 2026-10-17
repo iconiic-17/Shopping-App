@@ -15,13 +15,13 @@ void main() async {
 
   final isFirstTime = await AppPrefs.isFirstTime();
   FlutterNativeSplash.remove();
-
-  runApp(MyApp(isFirstTime: isFirstTime));
+  final  initialRoute=await initialRoute();
+  runApp(MyApp(isFirstTime: isFirstTime,initialRoute: initialRoute,));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.isFirstTime});
-
+  const MyApp({super.key, required this.isFirstTime, required this.initialRoute});
+  final String initialRoute;
   final bool isFirstTime;
 
   @override
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       title: 'Shopping App',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
-      initialRoute: isFirstTime ? AppRoutes.onBoarding : AppRoutes.hello,
+      initialRoute: isFirstTime ? AppRoutes.onBoarding : initialRoute,
       onGenerateRoute: AppRouter.generateRoute,
     );
   }
