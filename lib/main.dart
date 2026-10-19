@@ -10,6 +10,7 @@ import 'core/theme/app_theme.dart';
 import 'core/utils/app_prefs.dart';
 import 'features/cart/presentation/view_model/cart_cubit.dart';
 import 'features/favourite/presentation/view_model/favourite_cubit.dart';
+import 'features/account/presentation/view_model/account_cubit.dart';
 
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +41,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<CartCubit>(create: (_) => serviceLocator<CartCubit>()),
         BlocProvider<FavouriteCubit>(
           create: (_) => serviceLocator<FavouriteCubit>(),
+        ),
+        BlocProvider<AccountCubit>(
+          create: (_) => serviceLocator<AccountCubit>(),
         ),
       ],
       child: MaterialApp(

@@ -3,13 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/di/service_locator.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
 import 'package:shopping_app/core/theme/app_font_weight.dart';
+import 'package:shopping_app/core/widgets/app_snackbar.dart';
 import 'package:shopping_app/features/account/presentation/view/screens/account_screen.dart';
 import 'package:shopping_app/features/app_section/view_model/app_section_cubit.dart';
 import 'package:shopping_app/features/app_section/view_model/app_section_state.dart';
 import 'package:shopping_app/features/cart/presentation/view/screens/cart_screen.dart';
 import 'package:shopping_app/features/cart/presentation/view_model/cart_cubit.dart';
+import 'package:shopping_app/features/cart/presentation/view_model/cart_state.dart';
 import 'package:shopping_app/features/favourite/presentation/view/screens/favourite_screen.dart';
 import 'package:shopping_app/features/favourite/presentation/view_model/favourite_cubit.dart';
+import 'package:shopping_app/features/favourite/presentation/view_model/favourite_state.dart';
+import 'package:shopping_app/features/account/presentation/view_model/account_cubit.dart';
 import 'package:shopping_app/features/home/presentation/view/screens/home_screen.dart';
 import 'package:shopping_app/features/home/presentation/view_model/home_cubit.dart';
 
@@ -28,6 +32,7 @@ class _AppSectionViewState extends State<AppSectionView> {
       if (!mounted) return;
       context.read<CartCubit>().getCart();
       context.read<FavouriteCubit>().getFavourites();
+      context.read<AccountCubit>().getProfile();
     });
   }
 
@@ -45,9 +50,38 @@ class _AppSectionViewState extends State<AppSectionView> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => AppSectionCubit(),
-      child: BlocBuilder<AppSectionCubit, AppSectionState>(
-        builder: (context, state) {
-          return Scaffold(
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<CartCubit, CartState>(
+            listener: (context, state) {
+              if (state is CartActionError) {
+                showAppSnackBar(context, message: state.message, isError: true);
+              } else if (state is CartActionSuccess) {
+                showAppSnackBar(
+                  context,
+                  message: state.message,
+                  isError: false,
+                );
+              }
+            },
+          ),
+          BlocListener<FavouriteCubit, FavouriteState>(
+            listener: (context, state) {
+              if (state is FavouriteActionError) {
+                showAppSnackBar(context, message: state.message, isError: true);
+              } else if (state is FavouriteActionSuccess) {
+                showAppSnackBar(
+                  context,
+                  message: state.message,
+                  isError: false,
+                );
+              }
+            },
+          ),
+        ],
+        child: BlocBuilder<AppSectionCubit, AppSectionState>(
+          builder: (context, state) {
+            return Scaffold(
             backgroundColor: AppColors.offWhite,
             body: SafeArea(
               child: IndexedStack(index: state.currentIndex, children: _tabs),
@@ -59,6 +93,9 @@ class _AppSectionViewState extends State<AppSectionView> {
                 if (index == 1) context.read<CartCubit>().getCart();
                 if (index == 2) {
                   context.read<FavouriteCubit>().getFavourites();
+                }
+                if (index == 3) {
+                  context.read<AccountCubit>().getProfile();
                 }
               },
               type: BottomNavigationBarType.fixed,
@@ -99,6 +136,7 @@ class _AppSectionViewState extends State<AppSectionView> {
           );
         },
       ),
-    );
-  }
+    ),
+  );
+}
 }

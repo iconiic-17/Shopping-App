@@ -31,42 +31,36 @@ class CartCubit extends Cubit<CartState> {
     final result = await _getCartUseCase.invoke();
     switch (result) {
       case Success<List<CartItemEntity>>():
-        // Merge: keep locally-added items that the API doesn't know about yet.
-        final apiIds = result.data.map((e) => e.id).toSet();
-        final localOnly = _items.where((e) => !apiIds.contains(e.id)).toList();
-        _items = [...result.data, ...localOnly];
+        _items = result.data;
         emit(CartSuccess(List.from(_items), totalPrice));
       case Error<List<CartItemEntity>>():
-        // On error, keep whatever we already have locally.
-        if (_items.isNotEmpty) {
-          emit(CartSuccess(List.from(_items), totalPrice));
-        } else {
-          emit(CartError(result.messageError));
-        }
+        emit(CartError(result.messageError));
     }
   }
 
   Future<void> addToCart(ProductItemEntity product) async {
-    // Optimistic update: add locally first so the UI responds immediately.
-    if (!isInCart(product.id)) {
-      _items = [
-        ..._items,
-        CartItemEntity(
-          id: product.id,
-          title: product.title,
-          category: product.category,
-          size: '',
-          color: '',
-          price: product.price,
-          quantity: 1,
-          image: product.primaryImage,
-        ),
-      ];
+    final result = await _addCartUseCase.invoke(product.toWriteRequest());
+    switch (result) {
+      case Success<void>():
+        if (!isInCart(product.id)) {
+          _items = [
+            ..._items,
+            CartItemEntity(
+              id: product.id,
+              title: product.title,
+              category: product.category,
+              size: '',
+              color: '',
+              price: product.price,
+              quantity: 1,
+              image: product.primaryImage,
+            ),
+          ];
+        }
+        _emitAction('Item added to cart successfully', isError: false);
+      case Error<void>():
+        _emitAction(result.messageError, isError: true);
     }
-    _emitAction('Item added to cart successfully', isError: false);
-
-    // Fire-and-forget: try the API in background; ignore server failures.
-    _addCartUseCase.invoke(product.toWriteRequest());
   }
 
   Future<void> deleteItem(int productId) async {
@@ -106,7 +100,7 @@ class CartCubit extends Cubit<CartState> {
       emit(CartActionError(message, List.from(_items), totalPrice));
     } else {
       emit(CartActionSuccess(message, List.from(_items), totalPrice));
+      emit(CartSuccess(List.from(_items), totalPrice));
     }
-    emit(CartSuccess(List.from(_items), totalPrice));
   }
 }
