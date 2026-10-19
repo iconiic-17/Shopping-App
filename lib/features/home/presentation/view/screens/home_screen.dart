@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/di/service_locator.dart';
 import 'package:shopping_app/core/widgets/app_product_card.dart';
 import 'package:shopping_app/core/widgets/product_item_card.dart';
-import 'package:shopping_app/features/details/presentation/view/screen/product_details_screen.dart';
 import 'package:shopping_app/features/home/domain/entities/product_response_entity.dart';
 import 'package:shopping_app/features/home/presentation/view/widgets/categories_widget.dart';
 import 'package:shopping_app/features/home/presentation/view_model/home_cubit.dart';

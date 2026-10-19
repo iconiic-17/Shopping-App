@@ -5,6 +5,8 @@ import 'package:shopping_app/features/auth/presentation/screens/login_screen.dar
 import 'package:shopping_app/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:shopping_app/features/hello/presentation/screens/hello_screen.dart';
 import 'package:shopping_app/features/onboarding/presentation/view/screen/onboarding_screen.dart';
+import 'package:shopping_app/features/account/domain/entities/item_entity.dart';
+import 'package:shopping_app/features/account/presentation/view/screens/edit_profile_screen.dart';
 import 'app_routes.dart';
 
 class AppRouter {
@@ -22,6 +24,12 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const SignUpScreen());
       case AppRoutes.home:
         return MaterialPageRoute(builder: (_) => const AppSectionView());
+      case AppRoutes.updateAccount:
+        return MaterialPageRoute(
+          builder: (_) => EditProfileScreen(
+            user: settings.arguments as UserProfileEntity?,
+          ),
+        );
       default:
         debugPrint('Route not found: ${settings.name}');
         return MaterialPageRoute(

@@ -31,48 +31,38 @@ class FavouriteCubit extends Cubit<FavouriteState> {
     final result = await _getFavouritesUseCase.invoke();
     switch (result) {
       case Success<List<ProductItemEntity>>():
-        // Merge: keep locally-added items that the API doesn't know about yet.
-        final apiIds = result.data.map((e) => e.id).toSet();
-        final localOnly =
-            _items.where((e) => !apiIds.contains(e.id)).toList();
-        _items = [...result.data, ...localOnly];
+        _items = result.data;
         _favoriteIds
           ..clear()
           ..addAll(_items.map((e) => e.id));
         emit(FavouriteSuccess(List.from(_items)));
       case Error<List<ProductItemEntity>>():
-        // On error, keep whatever we already have locally.
-        if (_items.isNotEmpty) {
-          emit(FavouriteSuccess(List.from(_items)));
-        } else {
-          emit(FavouriteError(result.messageError));
-        }
+        emit(FavouriteError(result.messageError));
     }
   }
 
   Future<void> toggleFavourite(ProductItemEntity product) async {
     final alreadyFavourite = isFavourite(product.id);
 
-    // Optimistic update: toggle locally first so the UI responds immediately.
-    if (alreadyFavourite) {
-      _favoriteIds.remove(product.id);
-      _items = _items.where((item) => item.id != product.id).toList();
-    } else {
-      _favoriteIds.add(product.id);
-      if (!_items.any((item) => item.id == product.id)) {
-        _items = [..._items, product];
-      }
-    }
-    _emitAction(
-      alreadyFavourite ? 'Removed from favourites' : 'Added to favourites',
-      isError: false,
-    );
+    final result = alreadyFavourite
+        ? await _deleteFavouriteUseCase.invoke(product.id)
+        : await _addFavouriteUseCase.invoke(product.toWriteRequest());
 
-    // Fire-and-forget: try the API in background; ignore server failures.
-    if (alreadyFavourite) {
-      _deleteFavouriteUseCase.invoke(product.id);
-    } else {
-      _addFavouriteUseCase.invoke(product.toWriteRequest());
+    switch (result) {
+      case Success<void>():
+        if (alreadyFavourite) {
+          _favoriteIds.remove(product.id);
+          _items = _items.where((item) => item.id != product.id).toList();
+          _emitAction('Removed from favourites', isError: false);
+        } else {
+          _favoriteIds.add(product.id);
+          if (!_items.any((item) => item.id == product.id)) {
+            _items = [..._items, product];
+          }
+          _emitAction('Added to favourites', isError: false);
+        }
+      case Error<void>():
+        _emitAction(result.messageError, isError: true);
     }
   }
 
@@ -91,7 +81,7 @@ class FavouriteCubit extends Cubit<FavouriteState> {
       emit(FavouriteActionError(message, List.from(_items)));
     } else {
       emit(FavouriteActionSuccess(message, List.from(_items)));
+      emit(FavouriteSuccess(List.from(_items)));
     }
-    emit(FavouriteSuccess(List.from(_items)));
   }
 }

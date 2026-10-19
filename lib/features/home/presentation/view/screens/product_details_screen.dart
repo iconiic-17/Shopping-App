@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
 import 'package:shopping_app/core/theme/app_font_weight.dart';
+import 'package:shopping_app/core/widgets/app_snackbar.dart';
 import 'package:shopping_app/core/widgets/safe_network_image.dart';
 import 'package:shopping_app/features/cart/presentation/view_model/cart_cubit.dart';
+import 'package:shopping_app/features/cart/presentation/view_model/cart_state.dart';
 import 'package:shopping_app/features/favourite/presentation/view_model/favourite_cubit.dart';
+import 'package:shopping_app/features/favourite/presentation/view_model/favourite_state.dart';
 import 'package:shopping_app/features/home/domain/entities/product_response_entity.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
@@ -21,7 +24,28 @@ class ProductDetailsScreen extends StatelessWidget {
       (CartCubit cubit) => cubit.isInCart(product.id),
     );
 
-    return Scaffold(
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<CartCubit, CartState>(
+          listener: (context, state) {
+            if (state is CartActionError) {
+              showAppSnackBar(context, message: state.message, isError: true);
+            } else if (state is CartActionSuccess) {
+              showAppSnackBar(context, message: state.message, isError: false);
+            }
+          },
+        ),
+        BlocListener<FavouriteCubit, FavouriteState>(
+          listener: (context, state) {
+            if (state is FavouriteActionError) {
+              showAppSnackBar(context, message: state.message, isError: true);
+            } else if (state is FavouriteActionSuccess) {
+              showAppSnackBar(context, message: state.message, isError: false);
+            }
+          },
+        ),
+      ],
+      child: Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
         title: const Text('Product Details'),
@@ -143,6 +167,7 @@ class ProductDetailsScreen extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }
