@@ -16,17 +16,7 @@ class CartHeader extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
       child: Row(
         children: [
-          if (Navigator.canPop(context))
-            IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: Icon(
-                Icons.arrow_back_ios_new,
-                size: 18,
-                color: theme.colorScheme.onSurface,
-              ),
-            )
-          else
-            const SizedBox(width: 12),
+          const SizedBox(width: 8),
           Expanded(
             child: Text(
               'Your Cart',

@@ -1,6 +1,6 @@
 import 'package:shopping_app/core/utils/json_numbers.dart';
 import 'package:shopping_app/core/widgets/safe_network_image.dart';
-import 'package:shopping_app/features/cart/domain/entities/item_entity.dart';
+import 'package:shopping_app/features/cart/domain/entities/card_item_entity.dart';
 
 class CartItemDto {
   CartItemDto({

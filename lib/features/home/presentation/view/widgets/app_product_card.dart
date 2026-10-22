@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/widgets/product_item_card.dart';
 import 'package:shopping_app/features/cart/presentation/view_model/cart_cubit.dart';
+import 'package:shopping_app/features/details/presentation/view/screen/product_details_screen.dart';
 import 'package:shopping_app/features/favourite/presentation/view_model/favourite_cubit.dart';
 import 'package:shopping_app/features/home/domain/entities/product_response_entity.dart';
-import 'package:shopping_app/features/home/presentation/view/screens/product_details_screen.dart';
 
 class AppProductCard extends StatelessWidget {
   const AppProductCard({
@@ -30,7 +30,7 @@ class AppProductCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => ProductDetailsScreen(product: product),
+            builder: (_) => ProductDetailsScreen(productId: product.id),
           ),
         );
       },

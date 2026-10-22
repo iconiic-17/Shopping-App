@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:shopping_app/core/widgets/app_product_card.dart';
+import 'package:shopping_app/features/home/presentation/view/widgets/app_product_card.dart';
 import 'package:shopping_app/core/widgets/product_item_card.dart';
-import 'package:shopping_app/features/details/presentation/view/screen/product_details_screen.dart';
 import 'package:shopping_app/features/home/domain/entities/product_response_entity.dart';
 import 'package:shopping_app/features/home/presentation/view_model/products_by_category_cubit.dart';
 import 'package:shopping_app/features/home/presentation/view_model/products_by_category_state.dart';
@@ -23,7 +22,7 @@ class ProductsByCategoryScreen extends StatelessWidget {
     crossAxisCount: 2,
     crossAxisSpacing: 12,
     mainAxisSpacing: 12,
-    mainAxisExtent: 310,
+    mainAxisExtent: 320,
   );
 
   @override

@@ -3,9 +3,9 @@ import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/constants/api_constants.dart';
 import 'package:shopping_app/core/network/api_helpers.dart';
 import 'package:shopping_app/core/network/result_api.dart';
+import 'package:shopping_app/features/favourite/data/model/favourit_item_dto.dart';
+import 'package:shopping_app/features/favourite/domain/entities/favourit_item_entity.dart';
 import 'package:shopping_app/features/favourite/domain/repo/favourite_data_source_interface.dart';
-import 'package:shopping_app/features/home/data/model/product_response_dto.dart';
-import 'package:shopping_app/features/home/domain/entities/product_response_entity.dart';
 
 @Injectable(as: FavouriteDataSourceInterface)
 class FavouriteDataSourceImp implements FavouriteDataSourceInterface {
@@ -14,7 +14,7 @@ class FavouriteDataSourceImp implements FavouriteDataSourceInterface {
   final Dio _dio;
 
   @override
-  Future<ResultApi<List<ProductItemEntity>>> getFavourites() async {
+  Future<ResultApi<List<FavouriteItemEntity>>> getFavourites() async {
     try {
       final response = await _dio.get(ApiConstants.getFavorite);
       return Success(_parseList(response.data));
@@ -52,7 +52,7 @@ class FavouriteDataSourceImp implements FavouriteDataSourceInterface {
     }
   }
 
-  List<ProductItemEntity> _parseList(dynamic data) {
+  List<FavouriteItemEntity> _parseList(dynamic data) {
     final raw = extractApiList(
       data,
       keys: const [
@@ -64,11 +64,11 @@ class FavouriteDataSourceImp implements FavouriteDataSourceInterface {
         'items',
       ],
     );
-    final items = <ProductItemEntity>[];
+    final items = <FavouriteItemEntity>[];
     for (final item in raw) {
       if (item is! Map) continue;
       final map = Map<String, dynamic>.from(item);
-      items.add(ProductItemDto.fromJson(productMapOf(map)).toEntity());
+      items.add(FavouriteItemDto.fromJson(map).toEntity());
     }
     return items;
   }

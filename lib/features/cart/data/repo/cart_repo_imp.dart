@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/api_helpers.dart';
 import 'package:shopping_app/core/network/result_api.dart';
-import 'package:shopping_app/features/cart/domain/entities/item_entity.dart';
+import 'package:shopping_app/features/cart/domain/entities/card_item_entity.dart';
 import 'package:shopping_app/features/cart/domain/repo/cart_data_source_interface.dart';
 import 'package:shopping_app/features/cart/domain/repo/cart_repo_interface.dart';
 

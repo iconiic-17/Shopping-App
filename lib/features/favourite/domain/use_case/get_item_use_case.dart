@@ -1,8 +1,8 @@
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/api_helpers.dart';
 import 'package:shopping_app/core/network/result_api.dart';
+import 'package:shopping_app/features/favourite/domain/entities/favourit_item_entity.dart';
 import 'package:shopping_app/features/favourite/domain/repo/favourite_repo_interface.dart';
-import 'package:shopping_app/features/home/domain/entities/product_response_entity.dart';
 
 @injectable
 class GetFavouritesUseCase {
@@ -10,7 +10,8 @@ class GetFavouritesUseCase {
 
   final FavouriteRepoInterface _repo;
 
-  Future<ResultApi<List<ProductItemEntity>>> invoke() => _repo.getFavourites();
+  Future<ResultApi<List<FavouriteItemEntity>>> invoke() =>
+      _repo.getFavourites();
 }
 
 @injectable

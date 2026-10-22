@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
-import 'package:shopping_app/features/cart/domain/entities/item_entity.dart';
+import 'package:shopping_app/features/cart/domain/entities/card_item_entity.dart';
 import 'package:shopping_app/features/cart/domain/use_case/get_item_use_case.dart';
 import 'package:shopping_app/features/cart/presentation/view_model/cart_state.dart';
 import 'package:shopping_app/features/home/domain/entities/product_response_entity.dart';
@@ -9,7 +9,7 @@ import 'package:shopping_app/features/home/domain/entities/product_response_enti
 @lazySingleton
 class CartCubit extends Cubit<CartState> {
   CartCubit(this._getCartUseCase, this._addCartUseCase, this._deleteCartUseCase)
-    : super(CartInitial());
+    : super(const CartInitial());
 
   final GetCartUseCase _getCartUseCase;
   final AddCartUseCase _addCartUseCase;
@@ -25,21 +25,20 @@ class CartCubit extends Cubit<CartState> {
   bool isInCart(int productId) => _items.any((item) => item.id == productId);
 
   Future<void> getCart() async {
-    if (_items.isEmpty) {
-      emit(CartLoading());
+    if (state is CartInitial) {
+      emit(const CartLoading());
     }
     final result = await _getCartUseCase.invoke();
     switch (result) {
       case Success<List<CartItemEntity>>():
-        // Merge: keep locally-added items that the API doesn't know about yet.
-        final apiIds = result.data.map((e) => e.id).toSet();
-        final localOnly = _items.where((e) => !apiIds.contains(e.id)).toList();
-        _items = [...result.data, ...localOnly];
-        emit(CartSuccess(List.from(_items), totalPrice));
+        final localQty = {for (final i in _items) i.id: i.quantity};
+        _items = result.data
+            .map((i) => i.copyWith(quantity: localQty[i.id] ?? i.quantity))
+            .toList();
+        emit(CartSuccess(List.unmodifiable(_items), totalPrice));
       case Error<List<CartItemEntity>>():
-        // On error, keep whatever we already have locally.
         if (_items.isNotEmpty) {
-          emit(CartSuccess(List.from(_items), totalPrice));
+          _emitAction(result.messageError, isError: true);
         } else {
           emit(CartError(result.messageError));
         }
@@ -47,26 +46,32 @@ class CartCubit extends Cubit<CartState> {
   }
 
   Future<void> addToCart(ProductItemEntity product) async {
-    // Optimistic update: add locally first so the UI responds immediately.
-    if (!isInCart(product.id)) {
-      _items = [
-        ..._items,
-        CartItemEntity(
-          id: product.id,
-          title: product.title,
-          category: product.category,
-          size: '',
-          color: '',
-          price: product.price,
-          quantity: 1,
-          image: product.primaryImage,
-        ),
-      ];
+    if (isInCart(product.id)) {
+      changeQuantity(product.id, 1);
+      _emitAction('Increased quantity in cart', isError: false);
+      return;
     }
-    _emitAction('Item added to cart successfully', isError: false);
 
-    // Fire-and-forget: try the API in background; ignore server failures.
-    _addCartUseCase.invoke(product.toWriteRequest());
+    final result = await _addCartUseCase.invoke(product.toWriteRequest());
+    switch (result) {
+      case Success<void>():
+        _items = [
+          ..._items,
+          CartItemEntity(
+            id: product.id,
+            title: product.title,
+            category: product.category,
+            size: '',
+            color: '',
+            price: product.price,
+            quantity: 1,
+            image: product.primaryImage,
+          ),
+        ];
+        _emitAction('Item added to cart successfully', isError: false);
+      case Error<void>():
+        _emitAction(result.messageError, isError: true);
+    }
   }
 
   Future<void> deleteItem(int productId) async {
@@ -81,12 +86,27 @@ class CartCubit extends Cubit<CartState> {
   }
 
   Future<void> clearCart() async {
+    if (_items.isEmpty) return;
     final ids = _items.map((e) => e.id).toList();
-    for (final id in ids) {
-      await _deleteCartUseCase.invoke(id);
+    final results = await Future.wait(ids.map(_deleteCartUseCase.invoke));
+    final hasError = results.any((r) => r is Error<void>);
+
+    final refresh = await _getCartUseCase.invoke();
+    if (refresh is Success<List<CartItemEntity>>) {
+      _items = refresh.data;
+    } else {
+      _items = _items.where((item) {
+        final idx = ids.indexOf(item.id);
+        return idx != -1 && results[idx] is Error<void>;
+      }).toList();
     }
-    _items = [];
-    _emitAction('Cart cleared', isError: false);
+
+    if (hasError) {
+      _emitAction('Some items could not be removed', isError: true);
+    } else {
+      _items = [];
+      _emitAction('Cart cleared', isError: false);
+    }
   }
 
   void changeQuantity(int productId, int delta) {
@@ -98,15 +118,15 @@ class CartCubit extends Cubit<CartState> {
       return;
     }
     _items[index] = _items[index].copyWith(quantity: nextQuantity);
-    emit(CartSuccess(List.from(_items), totalPrice));
+    emit(CartSuccess(List.unmodifiable(_items), totalPrice));
   }
 
   void _emitAction(String message, {required bool isError}) {
     if (isError) {
-      emit(CartActionError(message, List.from(_items), totalPrice));
+      emit(CartActionError(message, List.unmodifiable(_items), totalPrice));
     } else {
-      emit(CartActionSuccess(message, List.from(_items), totalPrice));
+      emit(CartActionSuccess(message, List.unmodifiable(_items), totalPrice));
+      emit(CartSuccess(List.unmodifiable(_items), totalPrice));
     }
-    emit(CartSuccess(List.from(_items), totalPrice));
   }
 }

@@ -10,7 +10,6 @@ abstract class NetworkModule {
   Dio dio(AppSecureStorage storage) {
     final dio = Dio(
       BaseOptions(
-        // Trailing slash + relative paths keeps `/api/v1` in the final URL.
         baseUrl: '${ApiConstants.baseUrl}/',
         connectTimeout: const Duration(seconds: 30),
         receiveTimeout: const Duration(seconds: 30),

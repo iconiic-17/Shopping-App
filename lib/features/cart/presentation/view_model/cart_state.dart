@@ -1,34 +1,40 @@
-import 'package:shopping_app/features/cart/domain/entities/item_entity.dart';
+import 'package:shopping_app/features/cart/domain/entities/card_item_entity.dart';
 
-abstract class CartState {}
+sealed class CartState {
+  const CartState();
+}
 
-class CartInitial extends CartState {}
+final class CartInitial extends CartState {
+  const CartInitial();
+}
 
-class CartLoading extends CartState {}
+final class CartLoading extends CartState {
+  const CartLoading();
+}
 
-class CartSuccess extends CartState {
-  CartSuccess(this.items, this.totalPrice);
+final class CartSuccess extends CartState {
+  const CartSuccess(this.items, this.totalPrice);
 
   final List<CartItemEntity> items;
   final double totalPrice;
 }
 
-class CartError extends CartState {
-  CartError(this.message);
+final class CartError extends CartState {
+  const CartError(this.message);
 
   final String message;
 }
 
-class CartActionSuccess extends CartState {
-  CartActionSuccess(this.message, this.items, this.totalPrice);
+final class CartActionSuccess extends CartState {
+  const CartActionSuccess(this.message, this.items, this.totalPrice);
 
   final String message;
   final List<CartItemEntity> items;
   final double totalPrice;
 }
 
-class CartActionError extends CartState {
-  CartActionError(this.message, this.items, this.totalPrice);
+final class CartActionError extends CartState {
+  const CartActionError(this.message, this.items, this.totalPrice);
 
   final String message;
   final List<CartItemEntity> items;

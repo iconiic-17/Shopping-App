@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shopping_app/core/theme/app_font_weight.dart';
 import 'package:shopping_app/core/widgets/quantity_stepper.dart';
 import 'package:shopping_app/core/widgets/safe_network_image.dart';
-import 'package:shopping_app/features/cart/domain/entities/item_entity.dart';
+import 'package:shopping_app/features/cart/domain/entities/card_item_entity.dart';
 
 class CartItemWidget extends StatelessWidget {
   const CartItemWidget({
@@ -49,11 +49,7 @@ class CartItemWidget extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: SafeNetworkImage(
-                  url: item.image,
-                  width: 80,
-                  height: 80,
-                ),
+                child: SafeNetworkImage(url: item.image, width: 80, height: 80),
               ),
               const SizedBox(width: 12),
               Expanded(

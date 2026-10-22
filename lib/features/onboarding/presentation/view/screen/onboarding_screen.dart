@@ -113,9 +113,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               color: AppColors.textSecondary,
                             ),
                           ),
-                          const SizedBox(
-                            height: 48,
-                          ), // Space for bottom controls
+                          const SizedBox(height: 48),
                         ],
                       ),
                     ),
@@ -125,7 +123,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             },
           ),
 
-          // Skip Button
           Positioned(
             top: MediaQuery.of(context).padding.top + 16,
             right: 24,
@@ -156,7 +153,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
 
-          // Bottom Controls (Dots and Next Button)
           Positioned(
             bottom: MediaQuery.of(context).padding.bottom + 32,
             left: 32,

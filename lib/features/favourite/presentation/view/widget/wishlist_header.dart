@@ -55,7 +55,9 @@ class WishlistHeader extends StatelessWidget {
             onPressed: count > 0 ? onClear : null,
             icon: Icon(
               Icons.delete_outline,
-              color: count > 0 ? theme.colorScheme.onSurface : AppColors.textHint,
+              color: count > 0
+                  ? theme.colorScheme.onSurface
+                  : AppColors.textHint,
             ),
           ),
         ],

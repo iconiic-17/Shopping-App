@@ -24,9 +24,8 @@ String dioErrorMessage(DioException e) {
   if (data is Map) {
     final msg = (data['message'] ?? data['error'])?.toString() ?? '';
     if (msg.isNotEmpty) {
-      // Server-side bug: the backend fails to fetch from dummyjson
-      if (msg == 'Invalid URL' && statusCode == 500) {
-        return 'Server error — please try again later';
+      if (statusCode != null) {
+        return 'Server error ($statusCode): $msg';
       }
       return msg;
     }

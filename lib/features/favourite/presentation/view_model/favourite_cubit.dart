@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
+import 'package:shopping_app/features/favourite/domain/entities/favourit_item_entity.dart';
 import 'package:shopping_app/features/favourite/domain/use_case/get_item_use_case.dart';
 import 'package:shopping_app/features/favourite/presentation/view_model/favourite_state.dart';
 import 'package:shopping_app/features/home/domain/entities/product_response_entity.dart';
@@ -11,87 +12,122 @@ class FavouriteCubit extends Cubit<FavouriteState> {
     this._getFavouritesUseCase,
     this._addFavouriteUseCase,
     this._deleteFavouriteUseCase,
-  ) : super(FavouriteInitial());
+  ) : super(const FavouriteInitial());
 
   final GetFavouritesUseCase _getFavouritesUseCase;
   final AddFavouriteUseCase _addFavouriteUseCase;
   final DeleteFavouriteUseCase _deleteFavouriteUseCase;
 
-  List<ProductItemEntity> _items = [];
+  List<FavouriteItemEntity> _items = [];
   final Set<int> _favoriteIds = {};
+  final Set<int> _busy = {};
 
-  List<ProductItemEntity> get items => _items;
+  List<FavouriteItemEntity> get items => _items;
 
   bool isFavourite(int productId) => _favoriteIds.contains(productId);
 
   Future<void> getFavourites() async {
-    if (_items.isEmpty) {
-      emit(FavouriteLoading());
+    if (state is FavouriteInitial) {
+      emit(const FavouriteLoading());
     }
     final result = await _getFavouritesUseCase.invoke();
     switch (result) {
-      case Success<List<ProductItemEntity>>():
-        // Merge: keep locally-added items that the API doesn't know about yet.
-        final apiIds = result.data.map((e) => e.id).toSet();
-        final localOnly =
-            _items.where((e) => !apiIds.contains(e.id)).toList();
-        _items = [...result.data, ...localOnly];
+      case Success<List<FavouriteItemEntity>>(:final data):
+        _items = List.from(data);
         _favoriteIds
           ..clear()
           ..addAll(_items.map((e) => e.id));
-        emit(FavouriteSuccess(List.from(_items)));
-      case Error<List<ProductItemEntity>>():
-        // On error, keep whatever we already have locally.
+        emit(FavouriteSuccess(List.unmodifiable(_items)));
+      case Error<List<FavouriteItemEntity>>(:final messageError):
         if (_items.isNotEmpty) {
-          emit(FavouriteSuccess(List.from(_items)));
+          _emitAction(messageError, isError: true);
         } else {
-          emit(FavouriteError(result.messageError));
+          emit(FavouriteError(messageError));
         }
     }
   }
 
   Future<void> toggleFavourite(ProductItemEntity product) async {
-    final alreadyFavourite = isFavourite(product.id);
+    if (!_busy.add(product.id)) return;
+    final wasFav = isFavourite(product.id);
+    final favItem = FavouriteItemEntity.fromProduct(product);
 
-    // Optimistic update: toggle locally first so the UI responds immediately.
-    if (alreadyFavourite) {
+    if (wasFav) {
       _favoriteIds.remove(product.id);
       _items = _items.where((item) => item.id != product.id).toList();
     } else {
       _favoriteIds.add(product.id);
       if (!_items.any((item) => item.id == product.id)) {
-        _items = [..._items, product];
+        _items = [..._items, favItem];
       }
     }
-    _emitAction(
-      alreadyFavourite ? 'Removed from favourites' : 'Added to favourites',
-      isError: false,
-    );
+    emit(FavouriteSuccess(List.unmodifiable(_items)));
 
-    // Fire-and-forget: try the API in background; ignore server failures.
-    if (alreadyFavourite) {
-      _deleteFavouriteUseCase.invoke(product.id);
-    } else {
-      _addFavouriteUseCase.invoke(product.toWriteRequest());
+    try {
+      final result = wasFav
+          ? await _deleteFavouriteUseCase.invoke(product.id)
+          : await _addFavouriteUseCase.invoke(product.toWriteRequest());
+
+      switch (result) {
+        case Success<void>():
+          _emitAction(
+            wasFav ? 'Removed from favourites' : 'Added to favourites',
+            isError: false,
+          );
+        case Error<void>():
+          if (wasFav) {
+            _favoriteIds.add(product.id);
+            if (!_items.any((item) => item.id == product.id)) {
+              _items = [..._items, favItem];
+            }
+          } else {
+            _favoriteIds.remove(product.id);
+            _items = _items.where((item) => item.id != product.id).toList();
+          }
+          _emitAction(result.messageError, isError: true);
+      }
+    } finally {
+      _busy.remove(product.id);
     }
   }
 
   Future<void> clearFavourites() async {
+    if (_items.isEmpty) return;
     final ids = _items.map((e) => e.id).toList();
-    for (final id in ids) {
-      await _deleteFavouriteUseCase.invoke(id);
+    final results = await Future.wait(ids.map(_deleteFavouriteUseCase.invoke));
+    final hasError = results.any((r) => r is Error<void>);
+
+    final refresh = await _getFavouritesUseCase.invoke();
+    if (refresh is Success<List<FavouriteItemEntity>>) {
+      _items = List.from(refresh.data);
+      _favoriteIds
+        ..clear()
+        ..addAll(_items.map((e) => e.id));
+    } else {
+      _items = _items.where((item) {
+        final idx = ids.indexOf(item.id);
+        return idx != -1 && results[idx] is Error<void>;
+      }).toList();
+      _favoriteIds
+        ..clear()
+        ..addAll(_items.map((e) => e.id));
     }
-    _items = [];
-    _favoriteIds.clear();
-    _emitAction('Wishlist cleared', isError: false);
+
+    if (hasError) {
+      _emitAction('Some items could not be removed', isError: true);
+    } else {
+      _items = [];
+      _favoriteIds.clear();
+      _emitAction('Wishlist cleared', isError: false);
+    }
   }
 
   void _emitAction(String message, {required bool isError}) {
     if (isError) {
-      emit(FavouriteActionError(message, List.from(_items)));
+      emit(FavouriteActionError(message, List.unmodifiable(_items)));
     } else {
-      emit(FavouriteActionSuccess(message, List.from(_items)));
+      emit(FavouriteActionSuccess(message, List.unmodifiable(_items)));
+      emit(FavouriteSuccess(List.unmodifiable(_items)));
     }
-    emit(FavouriteSuccess(List.from(_items)));
   }
 }

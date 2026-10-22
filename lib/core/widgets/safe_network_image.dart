@@ -85,9 +85,8 @@ class SafeNetworkImage extends StatelessWidget {
           ),
         ),
       ),
-      errorWidget: (context, url, error) => const Center(
-        child: Icon(Icons.image_not_supported_outlined),
-      ),
+      errorWidget: (context, url, error) =>
+          const Center(child: Icon(Icons.image_not_supported_outlined)),
     );
   }
 }
