@@ -9,6 +9,7 @@ class ProductItemCard extends StatelessWidget {
   const ProductItemCard({
     super.key,
     required this.onTap,
+    this.favoriteWidget,
     this.favoriteOnTap,
     this.onFavoriteTap,
     this.addToCartOnTap,
@@ -25,6 +26,7 @@ class ProductItemCard extends StatelessWidget {
 
   final VoidCallback? addToCartOnTap;
   final bool isInCart;
+  final Widget? favoriteWidget;
   final Widget? favoriteOnTap;
   final VoidCallback? onFavoriteTap;
   final bool isFavorite;
@@ -46,15 +48,15 @@ class ProductItemCard extends StatelessWidget {
     if (discount >= 20) return '-${discount.toStringAsFixed(0)}%';
     if (discount > 0) return 'SALE';
     if (rating >= 4.8) return 'TOP';
-    if (rating >= 4.5) return 'NEW';
-    return 'HOT';
+    if (rating >= 4.5) return 'POPULAR';
+    return null;
   }
 
   Widget get _heart {
     if (onFavoriteTap != null) {
       return _FavoriteButton(isFavorite: isFavorite, onTap: onFavoriteTap);
     }
-    return favoriteOnTap ?? const SizedBox.shrink();
+    return favoriteWidget ?? favoriteOnTap ?? const SizedBox.shrink();
   }
 
   @override
@@ -161,7 +163,7 @@ class _GridCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        '${parent.price.toStringAsFixed(0)} \$',
+                        '\$${parent.price.toStringAsFixed(2)}',
                         style: const TextStyle(
                           fontWeight: AppFontWeight.extraBold,
                           fontSize: 16,
@@ -172,7 +174,7 @@ class _GridCard extends StatelessWidget {
                         const SizedBox(width: 6),
                         Flexible(
                           child: Text(
-                            '${parent._oldPrice.toStringAsFixed(0)} \$',
+                            '\$${parent._oldPrice.toStringAsFixed(2)}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
@@ -186,12 +188,9 @@ class _GridCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  GestureDetector(
+                  _AddToCartButton(
                     onTap: parent.addToCartOnTap,
-                    child: _AddToCartButton(
-                      onTap: parent.addToCartOnTap,
-                      isInCart: parent.isInCart,
-                    ),
+                    isInCart: parent.isInCart,
                   ),
                 ],
               ),
@@ -282,7 +281,7 @@ class _ListCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        '${parent.price.toStringAsFixed(0)} \$',
+                        '\$${parent.price.toStringAsFixed(2)}',
                         style: const TextStyle(
                           fontWeight: AppFontWeight.extraBold,
                           fontSize: 16,
@@ -292,7 +291,7 @@ class _ListCard extends StatelessWidget {
                       if (parent.discount > 0) ...[
                         const SizedBox(width: 6),
                         Text(
-                          '${parent._oldPrice.toStringAsFixed(0)} \$',
+                          '\$${parent._oldPrice.toStringAsFixed(2)}',
                           style: const TextStyle(
                             fontSize: 12,
                             color: AppColors.textHint,
@@ -317,12 +316,9 @@ class _ListCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  GestureDetector(
+                  _AddToCartButton(
                     onTap: parent.addToCartOnTap,
-                    child: _AddToCartButton(
-                      onTap: parent.addToCartOnTap,
-                      isInCart: parent.isInCart,
-                    ),
+                    isInCart: parent.isInCart,
                   ),
                 ],
               ),
@@ -355,7 +351,9 @@ class _FavoriteButton extends StatelessWidget {
           height: 32,
           child: Icon(
             isFavorite ? Icons.favorite : Icons.favorite_border,
-            color: isFavorite ? const Color(0xFFFF2D55) : AppColors.textSecondary,
+            color: isFavorite
+                ? const Color(0xFFFF2D55)
+                : AppColors.textSecondary,
             size: 18,
           ),
         ),
@@ -403,16 +401,22 @@ class _AddToCartButton extends StatelessWidget {
       child: ElevatedButton.icon(
         onPressed: onTap,
         icon: Icon(
-          isInCart ? Icons.shopping_bag : Icons.shopping_bag_outlined,
+          isInCart ? Icons.check_circle_outline : Icons.shopping_bag_outlined,
           size: 16,
         ),
-        label: const Text('Add to Cart'),
+        label: Text(isInCart ? 'In Cart' : 'Add to Cart'),
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.white,
+          backgroundColor: isInCart ? AppColors.white : AppColors.primary,
+          foregroundColor: isInCart ? AppColors.primary : AppColors.white,
+          side: isInCart
+              ? const BorderSide(color: AppColors.primary, width: 1.5)
+              : null,
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          textStyle: const TextStyle(fontSize: 12, fontWeight: AppFontWeight.bold),
+          textStyle: const TextStyle(
+            fontSize: 12,
+            fontWeight: AppFontWeight.bold,
+          ),
           shape: const StadiumBorder(),
         ),
       ),

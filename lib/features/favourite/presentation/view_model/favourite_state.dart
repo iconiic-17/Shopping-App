@@ -1,33 +1,39 @@
-import 'package:shopping_app/features/home/domain/entities/product_response_entity.dart';
+import 'package:shopping_app/features/favourite/domain/entities/favourit_item_entity.dart';
 
-abstract class FavouriteState {}
-
-class FavouriteInitial extends FavouriteState {}
-
-class FavouriteLoading extends FavouriteState {}
-
-class FavouriteSuccess extends FavouriteState {
-  FavouriteSuccess(this.items);
-
-  final List<ProductItemEntity> items;
+sealed class FavouriteState {
+  const FavouriteState();
 }
 
-class FavouriteError extends FavouriteState {
-  FavouriteError(this.message);
+final class FavouriteInitial extends FavouriteState {
+  const FavouriteInitial();
+}
+
+final class FavouriteLoading extends FavouriteState {
+  const FavouriteLoading();
+}
+
+final class FavouriteSuccess extends FavouriteState {
+  const FavouriteSuccess(this.items);
+
+  final List<FavouriteItemEntity> items;
+}
+
+final class FavouriteError extends FavouriteState {
+  const FavouriteError(this.message);
 
   final String message;
 }
 
-class FavouriteActionSuccess extends FavouriteState {
-  FavouriteActionSuccess(this.message, this.items);
+final class FavouriteActionSuccess extends FavouriteState {
+  const FavouriteActionSuccess(this.message, this.items);
 
   final String message;
-  final List<ProductItemEntity> items;
+  final List<FavouriteItemEntity> items;
 }
 
-class FavouriteActionError extends FavouriteState {
-  FavouriteActionError(this.message, this.items);
+final class FavouriteActionError extends FavouriteState {
+  const FavouriteActionError(this.message, this.items);
 
   final String message;
-  final List<ProductItemEntity> items;
+  final List<FavouriteItemEntity> items;
 }

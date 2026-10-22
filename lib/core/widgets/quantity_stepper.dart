@@ -26,7 +26,8 @@ class QuantityStepper extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14),
           child: Text(
             '$quantity',
-            style: textTheme.titleMedium?.copyWith(
+            style:
+                textTheme.titleMedium?.copyWith(
                   fontWeight: AppFontWeight.bold,
                 ) ??
                 const TextStyle(fontWeight: AppFontWeight.bold, fontSize: 16),
@@ -51,17 +52,16 @@ class _RoundIcon extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       customBorder: const CircleBorder(),
-      child: Container(
-        width: 28,
-        height: 28,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: AppColors.divider),
-        ),
-        child: Icon(
-          icon,
-          size: 16,
-          color: colorScheme.onSurface,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          width: 28,
+          height: 28,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: AppColors.divider),
+          ),
+          child: Icon(icon, size: 16, color: colorScheme.onSurface),
         ),
       ),
     );

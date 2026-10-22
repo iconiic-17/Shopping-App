@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
             _showMessage(context, state.message, Colors.green);
             Navigator.of(
               context,
-            ).pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
+            ).pushNamedAndRemoveUntil(AppRoutes.appSection, (route) => false);
           } else if (state is LoginError) {
             _showMessage(context, state.error, Colors.redAccent);
           }

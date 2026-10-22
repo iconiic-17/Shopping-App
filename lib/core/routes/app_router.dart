@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/features/account/domain/entities/account_item_entity.dart';
 
 import 'package:shopping_app/features/app_section/view/app_section_view.dart';
 import 'package:shopping_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:shopping_app/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:shopping_app/features/hello/presentation/screens/hello_screen.dart';
 import 'package:shopping_app/features/onboarding/presentation/view/screen/onboarding_screen.dart';
+import 'package:shopping_app/features/account/presentation/view/screens/edit_profile_screen.dart';
+import 'package:shopping_app/features/details/presentation/view/screen/product_details_screen.dart';
 import 'app_routes.dart';
 
 class AppRouter {
@@ -20,8 +23,19 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const LoginScreen());
       case AppRoutes.register:
         return MaterialPageRoute(builder: (_) => const SignUpScreen());
+      case AppRoutes.appSection:
       case AppRoutes.home:
         return MaterialPageRoute(builder: (_) => const AppSectionView());
+      case AppRoutes.updateAccount:
+        return MaterialPageRoute(
+          builder: (_) =>
+              EditProfileScreen(user: settings.arguments as UserProfileEntity?),
+        );
+      case AppRoutes.productDetails:
+        final productId = settings.arguments as int? ?? 1;
+        return MaterialPageRoute(
+          builder: (_) => ProductDetailsScreen(productId: productId),
+        );
       default:
         debugPrint('Route not found: ${settings.name}');
         return MaterialPageRoute(

@@ -6,6 +6,8 @@ import 'package:shopping_app/core/theme/app_text_styles.dart';
 abstract class AppTheme {
   static ThemeData light = ThemeData(
     scaffoldBackgroundColor: AppColors.backGroundGrey,
+    dividerColor: AppColors.border,
+    hintColor: AppColors.textHint,
     colorScheme: const ColorScheme.light(
       primary: AppColors.primary,
       secondary: AppColors.orangeLight,

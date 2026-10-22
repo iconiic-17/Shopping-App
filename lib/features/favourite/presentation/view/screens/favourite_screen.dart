@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
 import 'package:shopping_app/core/widgets/app_confirm_dialog.dart';
 import 'package:shopping_app/core/widgets/product_item_card.dart';
+import 'package:shopping_app/features/favourite/domain/entities/favourit_item_entity.dart';
 import 'package:shopping_app/features/favourite/presentation/view/widget/favourite_empty_state.dart';
 import 'package:shopping_app/features/favourite/presentation/view/widget/favourite_item.dart';
 import 'package:shopping_app/features/favourite/presentation/view/widget/wishlist_category_chips.dart';
 import 'package:shopping_app/features/favourite/presentation/view/widget/wishlist_header.dart';
 import 'package:shopping_app/features/favourite/presentation/view_model/favourite_cubit.dart';
 import 'package:shopping_app/features/favourite/presentation/view_model/favourite_state.dart';
-import 'package:shopping_app/features/home/domain/entities/product_response_entity.dart';
 
 class FavouriteScreen extends StatefulWidget {
   const FavouriteScreen({super.key});
@@ -21,12 +21,6 @@ class FavouriteScreen extends StatefulWidget {
 class _FavouriteScreenState extends State<FavouriteScreen> {
   bool _isGridView = true;
   String _selectedCategory = 'All';
-
-  @override
-  void initState() {
-    super.initState();
-    context.read<FavouriteCubit>().getFavourites();
-  }
 
   Future<void> _clearWishlist() async {
     final confirmed = await AppConfirmDialog.show(
@@ -40,7 +34,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
     }
   }
 
-  List<String> _categories(List<ProductItemEntity> items) {
+  List<String> _categories(List<FavouriteItemEntity> items) {
     final names = items
         .map((e) => e.category)
         .where((e) => e.trim().isNotEmpty)
@@ -54,7 +48,14 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
     return BlocBuilder<FavouriteCubit, FavouriteState>(
       builder: (context, state) {
         final cubit = context.read<FavouriteCubit>();
-        final items = cubit.items;
+
+        final items = switch (state) {
+          FavouriteSuccess(:final items) => items,
+          FavouriteActionSuccess(:final items) => items,
+          FavouriteActionError(:final items) => items,
+          _ => <FavouriteItemEntity>[],
+        };
+
         final categories = _categories(items);
         final selectedCategory = categories.contains(_selectedCategory)
             ? _selectedCategory
@@ -62,12 +63,49 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
         final filtered = selectedCategory == 'All'
             ? items
             : items
-                .where(
-                  (item) =>
-                      item.category.toLowerCase() ==
-                      selectedCategory.toLowerCase(),
-                )
-                .toList();
+                  .where(
+                    (item) =>
+                        item.category.toLowerCase() ==
+                        selectedCategory.toLowerCase(),
+                  )
+                  .toList();
+
+        final Widget content = switch (state) {
+          FavouriteLoading() => const Center(
+            child: CircularProgressIndicator(color: AppColors.primary),
+          ),
+          FavouriteError(:final message) => _FavouriteError(
+            message: message,
+            onRetry: cubit.getFavourites,
+          ),
+          _ when items.isEmpty => const FavouriteEmptyState(),
+          _ when filtered.isEmpty => const Center(
+            child: Text('No items in this category'),
+          ),
+          _ when _isGridView => GridView.builder(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              mainAxisExtent: 320,
+            ),
+            itemCount: filtered.length,
+            itemBuilder: (context, index) => FavouriteItem(
+              product: filtered[index],
+              layout: ProductCardLayout.grid,
+            ),
+          ),
+          _ => ListView.separated(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            itemCount: filtered.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 12),
+            itemBuilder: (context, index) => FavouriteItem(
+              product: filtered[index],
+              layout: ProductCardLayout.list,
+            ),
+          ),
+        };
 
         return Column(
           children: [
@@ -85,48 +123,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                     setState(() => _selectedCategory = value),
               ),
             const SizedBox(height: 12),
-            Expanded(
-              child: state is FavouriteLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primary,
-                      ),
-                    )
-                  : state is FavouriteError
-                  ? _FavouriteError(
-                      message: state.message,
-                      onRetry: cubit.getFavourites,
-                    )
-                  : items.isEmpty
-                  ? const FavouriteEmptyState()
-                  : filtered.isEmpty
-                  ? const Center(child: Text('No items in this category'))
-                  : _isGridView
-                  ? GridView.builder(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 12,
-                            mainAxisSpacing: 12,
-                            mainAxisExtent: 310,
-                          ),
-                      itemCount: filtered.length,
-                      itemBuilder: (context, index) => FavouriteItem(
-                        product: filtered[index],
-                        layout: ProductCardLayout.grid,
-                      ),
-                    )
-                  : ListView.separated(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      itemCount: filtered.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 12),
-                      itemBuilder: (context, index) => FavouriteItem(
-                        product: filtered[index],
-                        layout: ProductCardLayout.list,
-                      ),
-                    ),
-            ),
+            Expanded(child: content),
           ],
         );
       },

@@ -1,9 +1,9 @@
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/api_helpers.dart';
 import 'package:shopping_app/core/network/result_api.dart';
+import 'package:shopping_app/features/favourite/domain/entities/favourit_item_entity.dart';
 import 'package:shopping_app/features/favourite/domain/repo/favourite_data_source_interface.dart';
 import 'package:shopping_app/features/favourite/domain/repo/favourite_repo_interface.dart';
-import 'package:shopping_app/features/home/domain/entities/product_response_entity.dart';
 
 @Injectable(as: FavouriteRepoInterface)
 class FavouriteRepoImp implements FavouriteRepoInterface {
@@ -12,7 +12,7 @@ class FavouriteRepoImp implements FavouriteRepoInterface {
   final FavouriteDataSourceInterface _dataSource;
 
   @override
-  Future<ResultApi<List<ProductItemEntity>>> getFavourites() =>
+  Future<ResultApi<List<FavouriteItemEntity>>> getFavourites() =>
       _dataSource.getFavourites();
 
   @override

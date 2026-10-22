@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
 import 'package:shopping_app/core/widgets/app_confirm_dialog.dart';
 import 'package:shopping_app/core/widgets/app_snackbar.dart';
+import 'package:shopping_app/features/cart/domain/entities/card_item_entity.dart';
 import 'package:shopping_app/features/cart/presentation/view/widget/cart_checkout_bar.dart';
 import 'package:shopping_app/features/cart/presentation/view/widget/cart_empty_state.dart';
 import 'package:shopping_app/features/cart/presentation/view/widget/cart_header.dart';
@@ -10,28 +11,17 @@ import 'package:shopping_app/features/cart/presentation/view/widget/cart_item.da
 import 'package:shopping_app/features/cart/presentation/view_model/cart_cubit.dart';
 import 'package:shopping_app/features/cart/presentation/view_model/cart_state.dart';
 
-class CartScreen extends StatefulWidget {
+class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
 
-  @override
-  State<CartScreen> createState() => _CartScreenState();
-}
-
-class _CartScreenState extends State<CartScreen> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<CartCubit>().getCart();
-  }
-
-  Future<void> _clearCart() async {
+  Future<void> _clearCart(BuildContext context) async {
     final confirmed = await AppConfirmDialog.show(
       context,
       title: 'Are you sure you want to Clear your Cart permanently?',
       message:
           'By doing this, all saved products will be removed permanently and you will not be able to recover them.',
     );
-    if (confirmed && mounted) {
+    if (confirmed && context.mounted) {
       await context.read<CartCubit>().clearCart();
     }
   }
@@ -41,37 +31,51 @@ class _CartScreenState extends State<CartScreen> {
     return BlocBuilder<CartCubit, CartState>(
       builder: (context, state) {
         final cubit = context.read<CartCubit>();
-        final items = cubit.items;
-        final total = cubit.totalPrice;
+
+        final (items, total) = switch (state) {
+          CartSuccess(:final items, :final totalPrice) => (items, totalPrice),
+          CartActionSuccess(:final items, :final totalPrice) => (
+            items,
+            totalPrice,
+          ),
+          CartActionError(:final items, :final totalPrice) => (
+            items,
+            totalPrice,
+          ),
+          _ => (<CartItemEntity>[], 0.0),
+        };
+
+        final Widget content = switch (state) {
+          CartLoading() => const Center(
+            child: CircularProgressIndicator(color: AppColors.primary),
+          ),
+          CartError(:final message) => _CartError(
+            message: message,
+            onRetry: cubit.getCart,
+          ),
+          _ when items.isEmpty => const CartEmptyState(),
+          _ => ListView.builder(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              final item = items[index];
+              return CartItemWidget(
+                item: item,
+                onDelete: () => cubit.deleteItem(item.id),
+                onIncrement: () => cubit.changeQuantity(item.id, 1),
+                onDecrement: () => cubit.changeQuantity(item.id, -1),
+              );
+            },
+          ),
+        };
 
         return Column(
           children: [
-            CartHeader(onClear: _clearCart, canClear: items.isNotEmpty),
-            Expanded(
-              child: state is CartLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primary,
-                      ),
-                    )
-                  : state is CartError
-                  ? _CartError(message: state.message, onRetry: cubit.getCart)
-                  : items.isEmpty
-                  ? const CartEmptyState()
-                  : ListView.builder(
-                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                      itemCount: items.length,
-                      itemBuilder: (context, index) {
-                        final item = items[index];
-                        return CartItemWidget(
-                          item: item,
-                          onDelete: () => cubit.deleteItem(item.id),
-                          onIncrement: () => cubit.changeQuantity(item.id, 1),
-                          onDecrement: () => cubit.changeQuantity(item.id, -1),
-                        );
-                      },
-                    ),
+            CartHeader(
+              onClear: () => _clearCart(context),
+              canClear: items.isNotEmpty,
             ),
+            Expanded(child: content),
             if (items.isNotEmpty)
               CartCheckoutBar(
                 totalPrice: total,
